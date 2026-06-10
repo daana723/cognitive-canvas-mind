@@ -60,6 +60,12 @@ function ProfilePage() {
           <span className="font-display text-base tracking-wide">Cognitive Layer</span>
         </Link>
         <nav className="flex items-center gap-6">
+          <Link to="/map" className="text-xs tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm">
+            Map
+          </Link>
+          <Link to="/intensities" className="text-xs tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm">
+            Intensities
+          </Link>
           <Link to="/toolkit" className="text-xs tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm">
             Toolkit
           </Link>
@@ -232,6 +238,33 @@ function ProfilePage() {
         >
           Open the toolkit →
         </Link>
+      </section>
+
+      {/* Intensities + Map next step */}
+      <section className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center">
+        <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground mb-4">
+          The next layer
+        </p>
+        <h2 className="font-display text-3xl sm:text-4xl leading-tight">
+          Add the <span className="text-thread italic">Intensities.</span>
+        </h2>
+        <p className="mx-auto mt-6 max-w-xl text-base text-muted-foreground leading-relaxed">
+          A second reflection — Drive, Sense, Mind, Vision, Heart. The channels
+          where your nervous system runs hot. Together with SPARK, they unlock
+          the unified Cognitive Map and the twice-exceptional reading.
+        </p>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to="/intensities"
+            className="inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm tracking-[0.18em] uppercase transition-calm"
+            style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)", boxShadow: "var(--shadow-glow)" }}
+          >
+            Begin the Intensities →
+          </Link>
+          <Link to="/map" className="text-xs tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm px-4 py-2">
+            Or open the map →
+          </Link>
+        </div>
       </section>
 
       {/* Roadmap */}
