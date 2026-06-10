@@ -1,4 +1,5 @@
 import type { Responses } from "../spark/scoring";
+import type { IntensityResponses } from "../intensities/scoring";
 
 /**
  * Local-first storage layer.
@@ -8,9 +9,11 @@ import type { Responses } from "../spark/scoring";
 
 export interface StoredProfile {
   responses: Responses;
+  intensities?: IntensityResponses;
+  intensitiesCompletedAt?: string;
   completedAt?: string;
   updatedAt: string;
-  version: 1;
+  version: 2;
 }
 
 export interface StorageAdapter {
@@ -49,10 +52,30 @@ export const localStore: StorageAdapter = {
 export function upsertResponses(responses: Responses, opts?: { complete?: boolean }) {
   const existing = localStore.loadProfile();
   const next: StoredProfile = {
+    ...(existing ?? {}),
     responses,
     updatedAt: new Date().toISOString(),
     completedAt: opts?.complete ? new Date().toISOString() : existing?.completedAt,
-    version: 1,
+    version: 2,
+  };
+  localStore.saveProfile(next);
+  return next;
+}
+
+export function upsertIntensities(
+  intensities: IntensityResponses,
+  opts?: { complete?: boolean },
+) {
+  const existing = localStore.loadProfile();
+  const next: StoredProfile = {
+    responses: existing?.responses ?? {},
+    ...(existing ?? {}),
+    intensities,
+    updatedAt: new Date().toISOString(),
+    intensitiesCompletedAt: opts?.complete
+      ? new Date().toISOString()
+      : existing?.intensitiesCompletedAt,
+    version: 2,
   };
   localStore.saveProfile(next);
   return next;

@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MapRouteImport } from './routes/map'
+import { Route as IntensitiesRouteImport } from './routes/intensities'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +24,16 @@ const ToolkitRoute = ToolkitRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntensitiesRoute = IntensitiesRouteImport.update({
+  id: '/intensities',
+  path: '/intensities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssessmentRoute = AssessmentRouteImport.update({
@@ -38,12 +50,16 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/intensities': typeof IntensitiesRoute
+  '/map': typeof MapRoute
   '/profile': typeof ProfileRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/intensities': typeof IntensitiesRoute
+  '/map': typeof MapRoute
   '/profile': typeof ProfileRoute
   '/toolkit': typeof ToolkitRoute
 }
@@ -51,20 +67,37 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/intensities': typeof IntensitiesRoute
+  '/map': typeof MapRoute
   '/profile': typeof ProfileRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assessment' | '/profile' | '/toolkit'
+  fullPaths:
+    | '/'
+    | '/assessment'
+    | '/intensities'
+    | '/map'
+    | '/profile'
+    | '/toolkit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assessment' | '/profile' | '/toolkit'
-  id: '__root__' | '/' | '/assessment' | '/profile' | '/toolkit'
+  to: '/' | '/assessment' | '/intensities' | '/map' | '/profile' | '/toolkit'
+  id:
+    | '__root__'
+    | '/'
+    | '/assessment'
+    | '/intensities'
+    | '/map'
+    | '/profile'
+    | '/toolkit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssessmentRoute: typeof AssessmentRoute
+  IntensitiesRoute: typeof IntensitiesRoute
+  MapRoute: typeof MapRoute
   ProfileRoute: typeof ProfileRoute
   ToolkitRoute: typeof ToolkitRoute
 }
@@ -83,6 +116,20 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intensities': {
+      id: '/intensities'
+      path: '/intensities'
+      fullPath: '/intensities'
+      preLoaderRoute: typeof IntensitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment': {
@@ -105,6 +152,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssessmentRoute: AssessmentRoute,
+  IntensitiesRoute: IntensitiesRoute,
+  MapRoute: MapRoute,
   ProfileRoute: ProfileRoute,
   ToolkitRoute: ToolkitRoute,
 }
