@@ -6,6 +6,7 @@ import { scoreResponses, type Responses } from "@/lib/spark/scoring";
 import { resolveArchetype } from "@/lib/spark/archetypes";
 import { translate } from "@/lib/spark/translation";
 import { RadarChart } from "@/components/profile/RadarChart";
+import facelessAvatar from "@/assets/faceless-avatar.jpg";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -74,6 +75,10 @@ function ProfilePage() {
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground mb-6 fade-up">
           Your primary archetype
         </p>
+        <div className="mx-auto mb-10 h-32 w-32 sm:h-40 sm:w-40 rounded-full overflow-hidden fade-up relative" style={{ boxShadow: "var(--shadow-glow)", animationDelay: "40ms" }}>
+          <img src={facelessAvatar} alt="" className="h-full w-full object-cover" style={{ filter: "saturate(1.2) contrast(1.05)" }} />
+          <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle at 50% 30%, transparent 40%, oklch(0.13 0.05 275 / 0.6) 100%)" }} />
+        </div>
         <h1 className="font-display text-5xl sm:text-7xl leading-[1.05] fade-up" style={{ animationDelay: "80ms" }}>
           <span className="text-thread italic">{primary.archetype.name}</span>
         </h1>
