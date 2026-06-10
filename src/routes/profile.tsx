@@ -6,6 +6,8 @@ import { scoreResponses } from "@/lib/spark/scoring";
 import { DIMENSIONS } from "@/lib/spark/dimensions";
 import { resolveArchetype } from "@/lib/spark/archetypes";
 import type { Responses } from "@/lib/spark/scoring";
+import { translate } from "@/lib/spark/translation";
+import { RadarChart } from "@/components/profile/RadarChart";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
