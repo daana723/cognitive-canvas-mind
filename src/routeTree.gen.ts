@@ -9,38 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ToolkitRouteImport } from './routes/toolkit'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as MapRouteImport } from './routes/map'
-import { Route as IntensitiesRouteImport } from './routes/intensities'
-import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as IndexRouteImport } from './routes/index'
 
-const ToolkitRoute = ToolkitRouteImport.update({
-  id: '/toolkit',
-  path: '/toolkit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MapRoute = MapRouteImport.update({
-  id: '/map',
-  path: '/map',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IntensitiesRoute = IntensitiesRouteImport.update({
-  id: '/intensities',
-  path: '/intensities',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentRoute = AssessmentRouteImport.update({
-  id: '/assessment',
-  path: '/assessment',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,96 +19,28 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/assessment': typeof AssessmentRoute
-  '/intensities': typeof IntensitiesRoute
-  '/map': typeof MapRoute
-  '/profile': typeof ProfileRoute
-  '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/assessment': typeof AssessmentRoute
-  '/intensities': typeof IntensitiesRoute
-  '/map': typeof MapRoute
-  '/profile': typeof ProfileRoute
-  '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/assessment': typeof AssessmentRoute
-  '/intensities': typeof IntensitiesRoute
-  '/map': typeof MapRoute
-  '/profile': typeof ProfileRoute
-  '/toolkit': typeof ToolkitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/assessment'
-    | '/intensities'
-    | '/map'
-    | '/profile'
-    | '/toolkit'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assessment' | '/intensities' | '/map' | '/profile' | '/toolkit'
-  id:
-    | '__root__'
-    | '/'
-    | '/assessment'
-    | '/intensities'
-    | '/map'
-    | '/profile'
-    | '/toolkit'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AssessmentRoute: typeof AssessmentRoute
-  IntensitiesRoute: typeof IntensitiesRoute
-  MapRoute: typeof MapRoute
-  ProfileRoute: typeof ProfileRoute
-  ToolkitRoute: typeof ToolkitRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/toolkit': {
-      id: '/toolkit'
-      path: '/toolkit'
-      fullPath: '/toolkit'
-      preLoaderRoute: typeof ToolkitRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/map': {
-      id: '/map'
-      path: '/map'
-      fullPath: '/map'
-      preLoaderRoute: typeof MapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/intensities': {
-      id: '/intensities'
-      path: '/intensities'
-      fullPath: '/intensities'
-      preLoaderRoute: typeof IntensitiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/assessment': {
-      id: '/assessment'
-      path: '/assessment'
-      fullPath: '/assessment'
-      preLoaderRoute: typeof AssessmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -151,12 +53,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AssessmentRoute: AssessmentRoute,
-  IntensitiesRoute: IntensitiesRoute,
-  MapRoute: MapRoute,
-  ProfileRoute: ProfileRoute,
-  ToolkitRoute: ToolkitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
