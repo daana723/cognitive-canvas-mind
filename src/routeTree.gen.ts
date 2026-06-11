@@ -9,8 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkflowsRouteImport } from './routes/workflows'
+import { Route as TimingRouteImport } from './routes/timing'
+import { Route as SnapshotsRouteImport } from './routes/snapshots'
+import { Route as ReflectionsRouteImport } from './routes/reflections'
+import { Route as ModesRouteImport } from './routes/modes'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorkflowsRoute = WorkflowsRouteImport.update({
+  id: '/workflows',
+  path: '/workflows',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimingRoute = TimingRouteImport.update({
+  id: '/timing',
+  path: '/timing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SnapshotsRoute = SnapshotsRouteImport.update({
+  id: '/snapshots',
+  path: '/snapshots',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReflectionsRoute = ReflectionsRouteImport.update({
+  id: '/reflections',
+  path: '/reflections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModesRoute = ModesRouteImport.update({
+  id: '/modes',
+  path: '/modes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +55,116 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/map': typeof MapRoute
+  '/modes': typeof ModesRoute
+  '/reflections': typeof ReflectionsRoute
+  '/snapshots': typeof SnapshotsRoute
+  '/timing': typeof TimingRoute
+  '/workflows': typeof WorkflowsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/map': typeof MapRoute
+  '/modes': typeof ModesRoute
+  '/reflections': typeof ReflectionsRoute
+  '/snapshots': typeof SnapshotsRoute
+  '/timing': typeof TimingRoute
+  '/workflows': typeof WorkflowsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/map': typeof MapRoute
+  '/modes': typeof ModesRoute
+  '/reflections': typeof ReflectionsRoute
+  '/snapshots': typeof SnapshotsRoute
+  '/timing': typeof TimingRoute
+  '/workflows': typeof WorkflowsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/map'
+    | '/modes'
+    | '/reflections'
+    | '/snapshots'
+    | '/timing'
+    | '/workflows'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/map'
+    | '/modes'
+    | '/reflections'
+    | '/snapshots'
+    | '/timing'
+    | '/workflows'
+  id:
+    | '__root__'
+    | '/'
+    | '/map'
+    | '/modes'
+    | '/reflections'
+    | '/snapshots'
+    | '/timing'
+    | '/workflows'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MapRoute: typeof MapRoute
+  ModesRoute: typeof ModesRoute
+  ReflectionsRoute: typeof ReflectionsRoute
+  SnapshotsRoute: typeof SnapshotsRoute
+  TimingRoute: typeof TimingRoute
+  WorkflowsRoute: typeof WorkflowsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workflows': {
+      id: '/workflows'
+      path: '/workflows'
+      fullPath: '/workflows'
+      preLoaderRoute: typeof WorkflowsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timing': {
+      id: '/timing'
+      path: '/timing'
+      fullPath: '/timing'
+      preLoaderRoute: typeof TimingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/snapshots': {
+      id: '/snapshots'
+      path: '/snapshots'
+      fullPath: '/snapshots'
+      preLoaderRoute: typeof SnapshotsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reflections': {
+      id: '/reflections'
+      path: '/reflections'
+      fullPath: '/reflections'
+      preLoaderRoute: typeof ReflectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modes': {
+      id: '/modes'
+      path: '/modes'
+      fullPath: '/modes'
+      preLoaderRoute: typeof ModesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +177,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MapRoute: MapRoute,
+  ModesRoute: ModesRoute,
+  ReflectionsRoute: ReflectionsRoute,
+  SnapshotsRoute: SnapshotsRoute,
+  TimingRoute: TimingRoute,
+  WorkflowsRoute: WorkflowsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
