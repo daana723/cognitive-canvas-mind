@@ -45,6 +45,43 @@ export const LOOM_MODULES: LoomModule[] = [
       { id: "channels", label: "Channels", kind: "tags", placeholder: "site, newsletter, social…" },
     ],
   },
+  {
+    id: "platform-adapter",
+    label: "Platform Adapter",
+    blurb: "Reshape one piece for a specific platform without losing its spine.",
+    status: "stub",
+    inputs: [
+      { id: "source", label: "Source piece", kind: "longtext", placeholder: "Paste the original." },
+      {
+        id: "platform",
+        label: "Target platform",
+        kind: "select",
+        options: ["newsletter", "x/thread", "linkedin", "instagram", "site", "talk"],
+      },
+      { id: "constraint", label: "Constraint", kind: "text", placeholder: "Length, tone, or audience note." },
+    ],
+  },
+  {
+    id: "serendipity-lab",
+    label: "Serendipity Lab",
+    blurb: "Cross-pollinate the current field with an adjacent domain to find non-obvious moves.",
+    status: "stub",
+    inputs: [
+      { id: "field", label: "The field", kind: "longtext", placeholder: "What you're working on." },
+      { id: "adjacencies", label: "Adjacent domains", kind: "tags", placeholder: "cartography, jazz, mycology…" },
+    ],
+  },
+  {
+    id: "creative-operator",
+    label: "Creative Operator",
+    blurb: "Turn a scattered week of creative activity into the next three concrete moves.",
+    status: "stub",
+    inputs: [
+      { id: "log", label: "Recent log", kind: "longtext", placeholder: "Recent work, notes, half-finished threads." },
+      { id: "horizon", label: "Horizon", kind: "select", options: ["this week", "this month", "this quarter"] },
+      { id: "energy", label: "Energy", kind: "select", options: ["low", "steady", "high"] },
+    ],
+  },
 ];
 
 export const getLoomModule = (id: string): LoomModule | undefined =>
