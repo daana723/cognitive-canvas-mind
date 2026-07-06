@@ -5,10 +5,10 @@ import { MODES } from "@/lib/modes/modes";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Creative Studio — A workflow tool for nonlinear thinkers" },
-      { name: "description", content: "A symbolic creative-cognition studio for nonlinear thinkers, founders, and ND-friendly creators. Choose your mode. Map your work. No assessment, no analysis." },
-      { property: "og:title", content: "Creative Studio" },
-      { property: "og:description", content: "Choose your creative mode. Map your work. A studio, not an assessment." },
+      { title: "Nonlinear Studio — a creative cognitive layer" },
+      { name: "description", content: "A creative cognitive layer for nonlinear thinkers. Two doors: SPARK, a reflective mirror; Loom, a practical workspace. Local-first. Non-diagnostic." },
+      { property: "og:title", content: "Nonlinear Studio" },
+      { property: "og:description", content: "SPARK reflection · Loom workspace. A studio for nonlinear thinkers, not a verdict about them." },
     ],
   }),
   component: Landing,
@@ -22,10 +22,11 @@ function Landing() {
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-8">
         <Link to="/" className="flex items-center gap-3 group">
           <span className="h-2.5 w-2.5 rounded-full breathe" style={{ background: "var(--gradient-thread)" }} />
-          <span className="font-display text-lg tracking-wide">Creative Studio</span>
+          <span className="font-display text-lg tracking-wide">Nonlinear Studio</span>
         </Link>
         <nav className="hidden gap-7 sm:flex">
           {[
+            { to: "/spark", label: "SPARK" },
             { to: "/modes", label: "Modes" },
             { to: "/map", label: "Map" },
             { to: "/workflows", label: "Workflows" },
@@ -42,35 +43,59 @@ function Landing() {
       <section className="relative z-10 mx-auto max-w-4xl px-6 pt-16 pb-24 sm:pt-28 text-center">
         <p className="mb-8 inline-flex items-center gap-2 text-[11px] tracking-[0.32em] uppercase text-muted-foreground fade-up">
           <span className="h-px w-8 bg-border" />
-          a studio for nonlinear thinkers
+          a creative cognitive layer
           <span className="h-px w-8 bg-border" />
         </p>
         <h1 className="font-display text-5xl sm:text-7xl leading-[1.05] fade-up" style={{ animationDelay: "60ms" }}>
-          Choose your <span className="text-thread italic">current.</span>
+          A studio for
           <br />
-          Map the work.
+          <span className="text-thread italic">nonlinear thinkers.</span>
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg sm:text-xl leading-relaxed text-muted-foreground fade-up" style={{ animationDelay: "180ms" }}>
-          A creative cognition and workflow tool for founders, ND-friendly creators, and
-          anyone whose mind doesn't move in straight lines. You choose the mode.
-          The studio holds the structure. Nothing is inferred about you.
+          Two equal doors. SPARK is a reflective mirror — a deep, guided
+          reflection for recognizing patterns in how you create, sense, decide,
+          and move through ideas. Loom is a practical workspace — for turning
+          scattered ideas into finished outputs. Nothing is inferred about you.
         </p>
-        <div className="mt-12 flex flex-wrap justify-center gap-4 fade-up" style={{ animationDelay: "280ms" }}>
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 fade-up" style={{ animationDelay: "280ms" }}>
+          <Link
+            to="/spark"
+            className="glass-panel group relative rounded-3xl p-8 text-left transition-calm hover:-translate-y-1"
+          >
+            <p className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground">
+              The reflective door
+            </p>
+            <h2 className="mt-3 font-display text-3xl">
+              Take the <span className="text-thread italic">SPARK</span> reflection
+            </h2>
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+              A guided reflective mirror. Recognize patterns in how you create,
+              sense, decide, and move through ideas. Deep, careful, non-diagnostic.
+            </p>
+            <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
+              Enter the reflection →
+            </p>
+          </Link>
           <Link
             to="/modes"
-            className="group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm tracking-[0.18em] uppercase transition-calm"
-            style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)", boxShadow: "var(--shadow-glow)" }}
+            className="glass-panel group relative rounded-3xl p-8 text-left transition-calm hover:-translate-y-1"
           >
-            Pick a mode <span className="transition-calm group-hover:translate-x-1">→</span>
-          </Link>
-          <Link
-            to="/map"
-            className="inline-flex items-center gap-3 rounded-full border border-border/70 px-8 py-4 text-sm tracking-[0.18em] uppercase text-foreground hover:bg-white/5 transition-calm"
-          >
-            Map a state
+            <p className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground">
+              The practical door
+            </p>
+            <h2 className="mt-3 font-display text-3xl">
+              Open the <span className="text-thread italic">Loom</span> workspace
+            </h2>
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+              A workspace for nonlinear making. Choose a mode, pull scattered
+              ideas onto a map, run a workflow, keep what you notice.
+            </p>
+            <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
+              Open the workspace →
+            </p>
           </Link>
         </div>
-        <p className="mt-6 text-xs text-muted-foreground">
+        <p className="mt-10 text-xs text-muted-foreground">
           Local-first · nothing leaves your device
         </p>
       </section>

@@ -11,11 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkflowsRouteImport } from './routes/workflows'
 import { Route as TimingRouteImport } from './routes/timing'
+import { Route as SparkRouteImport } from './routes/spark'
 import { Route as SnapshotsRouteImport } from './routes/snapshots'
 import { Route as ReflectionsRouteImport } from './routes/reflections'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SparkIndexRouteImport } from './routes/spark.index'
+import { Route as SparkReflectRouteImport } from './routes/spark.reflect'
+import { Route as SparkMirrorRouteImport } from './routes/spark.mirror'
+import { Route as SparkCurrentsRouteImport } from './routes/spark.currents'
 
 const WorkflowsRoute = WorkflowsRouteImport.update({
   id: '/workflows',
@@ -25,6 +30,11 @@ const WorkflowsRoute = WorkflowsRouteImport.update({
 const TimingRoute = TimingRouteImport.update({
   id: '/timing',
   path: '/timing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SparkRoute = SparkRouteImport.update({
+  id: '/spark',
+  path: '/spark',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SnapshotsRoute = SnapshotsRouteImport.update({
@@ -52,6 +62,26 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SparkIndexRoute = SparkIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SparkRoute,
+} as any)
+const SparkReflectRoute = SparkReflectRouteImport.update({
+  id: '/reflect',
+  path: '/reflect',
+  getParentRoute: () => SparkRoute,
+} as any)
+const SparkMirrorRoute = SparkMirrorRouteImport.update({
+  id: '/mirror',
+  path: '/mirror',
+  getParentRoute: () => SparkRoute,
+} as any)
+const SparkCurrentsRoute = SparkCurrentsRouteImport.update({
+  id: '/currents',
+  path: '/currents',
+  getParentRoute: () => SparkRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,8 +89,13 @@ export interface FileRoutesByFullPath {
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
   '/snapshots': typeof SnapshotsRoute
+  '/spark': typeof SparkRouteWithChildren
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/spark/currents': typeof SparkCurrentsRoute
+  '/spark/mirror': typeof SparkMirrorRoute
+  '/spark/reflect': typeof SparkReflectRoute
+  '/spark/': typeof SparkIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +105,10 @@ export interface FileRoutesByTo {
   '/snapshots': typeof SnapshotsRoute
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/spark/currents': typeof SparkCurrentsRoute
+  '/spark/mirror': typeof SparkMirrorRoute
+  '/spark/reflect': typeof SparkReflectRoute
+  '/spark': typeof SparkIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +117,13 @@ export interface FileRoutesById {
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
   '/snapshots': typeof SnapshotsRoute
+  '/spark': typeof SparkRouteWithChildren
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/spark/currents': typeof SparkCurrentsRoute
+  '/spark/mirror': typeof SparkMirrorRoute
+  '/spark/reflect': typeof SparkReflectRoute
+  '/spark/': typeof SparkIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -89,8 +133,13 @@ export interface FileRouteTypes {
     | '/modes'
     | '/reflections'
     | '/snapshots'
+    | '/spark'
     | '/timing'
     | '/workflows'
+    | '/spark/currents'
+    | '/spark/mirror'
+    | '/spark/reflect'
+    | '/spark/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +149,10 @@ export interface FileRouteTypes {
     | '/snapshots'
     | '/timing'
     | '/workflows'
+    | '/spark/currents'
+    | '/spark/mirror'
+    | '/spark/reflect'
+    | '/spark'
   id:
     | '__root__'
     | '/'
@@ -107,8 +160,13 @@ export interface FileRouteTypes {
     | '/modes'
     | '/reflections'
     | '/snapshots'
+    | '/spark'
     | '/timing'
     | '/workflows'
+    | '/spark/currents'
+    | '/spark/mirror'
+    | '/spark/reflect'
+    | '/spark/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,6 +175,7 @@ export interface RootRouteChildren {
   ModesRoute: typeof ModesRoute
   ReflectionsRoute: typeof ReflectionsRoute
   SnapshotsRoute: typeof SnapshotsRoute
+  SparkRoute: typeof SparkRouteWithChildren
   TimingRoute: typeof TimingRoute
   WorkflowsRoute: typeof WorkflowsRoute
 }
@@ -135,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/timing'
       fullPath: '/timing'
       preLoaderRoute: typeof TimingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spark': {
+      id: '/spark'
+      path: '/spark'
+      fullPath: '/spark'
+      preLoaderRoute: typeof SparkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/snapshots': {
@@ -172,8 +238,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/spark/': {
+      id: '/spark/'
+      path: '/'
+      fullPath: '/spark/'
+      preLoaderRoute: typeof SparkIndexRouteImport
+      parentRoute: typeof SparkRoute
+    }
+    '/spark/reflect': {
+      id: '/spark/reflect'
+      path: '/reflect'
+      fullPath: '/spark/reflect'
+      preLoaderRoute: typeof SparkReflectRouteImport
+      parentRoute: typeof SparkRoute
+    }
+    '/spark/mirror': {
+      id: '/spark/mirror'
+      path: '/mirror'
+      fullPath: '/spark/mirror'
+      preLoaderRoute: typeof SparkMirrorRouteImport
+      parentRoute: typeof SparkRoute
+    }
+    '/spark/currents': {
+      id: '/spark/currents'
+      path: '/currents'
+      fullPath: '/spark/currents'
+      preLoaderRoute: typeof SparkCurrentsRouteImport
+      parentRoute: typeof SparkRoute
+    }
   }
 }
+
+interface SparkRouteChildren {
+  SparkCurrentsRoute: typeof SparkCurrentsRoute
+  SparkMirrorRoute: typeof SparkMirrorRoute
+  SparkReflectRoute: typeof SparkReflectRoute
+  SparkIndexRoute: typeof SparkIndexRoute
+}
+
+const SparkRouteChildren: SparkRouteChildren = {
+  SparkCurrentsRoute: SparkCurrentsRoute,
+  SparkMirrorRoute: SparkMirrorRoute,
+  SparkReflectRoute: SparkReflectRoute,
+  SparkIndexRoute: SparkIndexRoute,
+}
+
+const SparkRouteWithChildren = SparkRoute._addFileChildren(SparkRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -181,6 +291,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModesRoute: ModesRoute,
   ReflectionsRoute: ReflectionsRoute,
   SnapshotsRoute: SnapshotsRoute,
+  SparkRoute: SparkRouteWithChildren,
   TimingRoute: TimingRoute,
   WorkflowsRoute: WorkflowsRoute,
 }
