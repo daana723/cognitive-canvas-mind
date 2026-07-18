@@ -1,85 +1,134 @@
 /**
- * SPARK Reflection Facets
+ * SPARK — 5-dimension 2E framework.
  *
- * Seven facets a nonlinear thinker might notice about their own cognition.
- * These are descriptive prompts for recognition — not traits, scores,
- * dimensions, or a profile. The user recognizes; the studio never assigns.
+ * From ND-cognitive-OS SPARK_FRAMEWORK. Each dimension is scored 0–4
+ * (averaged from Likert responses). The five together produce a
+ * Spark Index (0–20) and a profile type. The user still recognizes;
+ * the framework surfaces a pattern, not a verdict.
+ *
+ * Legacy note: the previous 7-facet vocabulary lives on only as the
+ * type name `FacetId` for backward compatibility with existing code
+ * paths — the IDs are the SPARK dimensions.
  */
 
 export type FacetId =
-  | "attention"
-  | "rhythm"
-  | "feeling"
-  | "sensing"
-  | "understanding"
-  | "making"
-  | "deciding";
+  | "CI" // Cognitive Intensity
+  | "ER" // Emotional Resonance
+  | "SA" // Sensory Amplification
+  | "CD" // Creative Divergence
+  | "ED"; // Existential Drive
+
+export type DimensionId = FacetId;
 
 export interface Facet {
   id: FacetId;
+  short: string;
   label: string;
   essence: string;
   description: string;
-  poles: { low: string; high: string };
+  accent: string;
+  glyph: "triangle" | "circle" | "radiate" | "branch" | "spiral";
 }
 
 export const FACETS: Facet[] = [
   {
-    id: "attention",
-    label: "How attention moves",
-    essence: "The shape of your focus across the day.",
+    id: "CI",
+    short: "Cognitive Intensity",
+    label: "Depth of processing",
+    essence: "Pattern sensitivity, associative speed, hyperfocus capacity.",
     description:
-      "Whether your attention darts between many possibilities or drops deep into one current at a time.",
-    poles: { low: "Exploratory", high: "Immersive" },
+      "How deeply your mind drops into a topic, how fast associations form, how absorbing focus becomes.",
+    accent: "oklch(0.78 0.16 260)",
+    glyph: "triangle",
   },
   {
-    id: "rhythm",
-    label: "How energy arrives",
-    essence: "The rhythm of your working current.",
+    id: "ER",
+    short: "Emotional Resonance",
+    label: "Depth of feeling",
+    essence: "Emotional depth, empathy, reactivity, existential sensitivity.",
     description:
-      "Whether your energy moves as a steady stream or arrives in waves of surge and rest.",
-    poles: { low: "Wave-shaped", high: "Sustained" },
+      "How strongly feelings arrive, how much emotional information you carry from a room, a story, or another person.",
+    accent: "oklch(0.76 0.17 20)",
+    glyph: "circle",
   },
   {
-    id: "feeling",
-    label: "How feeling shows up",
-    essence: "How emotion carries information for you.",
+    id: "SA",
+    short: "Sensory Amplification",
+    label: "Aperture of the senses",
+    essence: "Sensory sensitivity, environmental overload, aesthetic perception.",
     description:
-      "Whether feelings arrive quickly and at volume, or settle slowly and reveal themselves in retrospect.",
-    poles: { low: "Reflective", high: "Resonant" },
+      "How much of the room reaches you — light, sound, texture, atmosphere — and how much it shapes your thinking.",
+    accent: "oklch(0.82 0.14 195)",
+    glyph: "radiate",
   },
   {
-    id: "sensing",
-    label: "How the world arrives",
-    essence: "The aperture your senses hold open.",
+    id: "CD",
+    short: "Creative Divergence",
+    label: "Originality of thought",
+    essence: "Nonlinear thinking, symbolic cognition, idea generation.",
     description:
-      "Whether the room filters gently or comes in at high resolution — light, sound, texture, atmosphere.",
-    poles: { low: "Filtered", high: "High-resolution" },
+      "How readily ideas arrive in unusual combinations, in metaphors and images rather than fixed steps.",
+    accent: "oklch(0.80 0.16 310)",
+    glyph: "branch",
   },
   {
-    id: "understanding",
-    label: "How things land",
-    essence: "The shape of how understanding takes hold.",
+    id: "ED",
+    short: "Existential Drive",
+    label: "Search for meaning",
+    essence: "Meaning-seeking, philosophical depth, identity exploration, inner transformation.",
     description:
-      "Whether new ideas arrive through sequence and steps, or through association and pattern.",
-    poles: { low: "Sequential", high: "Associative" },
-  },
-  {
-    id: "making",
-    label: "How you make",
-    essence: "How new things take form through you.",
-    description:
-      "Whether you refine deeply within a frame, or compose by bringing distant things into one room.",
-    poles: { low: "Refining", high: "Synthesizing" },
-  },
-  {
-    id: "deciding",
-    label: "How choices land",
-    essence: "How decisions crystallize.",
-    description:
-      "Whether you decide through structured analysis, or through felt sense and quiet knowing.",
-    poles: { low: "Analytical", high: "Intuitive" },
+      "How present the questions of meaning, self, and transformation are in your daily inner life.",
+    accent: "oklch(0.85 0.14 90)",
+    glyph: "spiral",
   },
 ];
 
 export const getFacet = (id: FacetId) => FACETS.find((f) => f.id === id)!;
+export const getDimension = getFacet;
+
+export interface SparkProfileType {
+  key: "quiet" | "flickering" | "burning" | "wildfire";
+  name: string;
+  range: [number, number];
+  description: string;
+  note: string;
+}
+
+export const SPARK_PROFILES: SparkProfileType[] = [
+  {
+    key: "quiet",
+    name: "The Quiet Spark",
+    range: [0, 6],
+    description:
+      "Low activation. Neurodivergent traits present but dormant or gently held. The current is there — it may not be running warm right now.",
+    note: "There is nothing to prove here. A quiet spark is still a spark.",
+  },
+  {
+    key: "flickering",
+    name: "The Flickering Spark",
+    range: [7, 12],
+    description:
+      "Moderate intensity. Traits arrive situationally, then recede. Often misunderstood by systems built for the middle of the curve.",
+    note: "Notice the conditions that turn the flicker into a steady flame.",
+  },
+  {
+    key: "burning",
+    name: "The Burning Spark",
+    range: [13, 16],
+    description:
+      "High intensity across multiple dimensions. A clear 2E profile — the mind and the nervous system both run hot. Systems built for neurotypical rhythms will not fit; the work is to build ones that do.",
+    note: "The intensity is a resource. It becomes a cost when the environment does not meet it.",
+  },
+  {
+    key: "wildfire",
+    name: "The Wildfire",
+    range: [17, 20],
+    description:
+      "Extreme intensity across most dimensions. Dabrowski Level 3–4 territory — disintegration and transformation happen in the same season. Great creative range; real risk of overwhelm.",
+    note: "The wildfire needs both fuel and firebreaks. Both are on you to design.",
+  },
+];
+
+export function profileFromIndex(index: number): SparkProfileType {
+  return SPARK_PROFILES.find((p) => index >= p.range[0] && index <= p.range[1]) ?? SPARK_PROFILES[0];
+}
