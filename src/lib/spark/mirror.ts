@@ -1,4 +1,6 @@
-import type { FacetLean } from "./resonance";
+import type { DimensionScores, FacetLean } from "./resonance";
+import { sparkIndex, sparkProfile } from "./resonance";
+import type { SparkProfileType } from "./facets";
 import type { CurrentId } from "./currents";
 import type { ModeId } from "@/lib/modes/modes";
 import { MODES } from "@/lib/modes/modes";
@@ -30,6 +32,9 @@ export interface MirrorReading {
   currentHeat: Partial<Record<CurrentId, number>>;
   symbolicModes: SymbolicModeMatch[];
   note: string;
+  scores: DimensionScores;
+  index: number;
+  profile: SparkProfileType;
 }
 
 const MOTIF_TEMPLATES: Array<{
@@ -43,70 +48,42 @@ const MOTIF_TEMPLATES: Array<{
     label: "Immersive focus",
     reading:
       "You may recognize the pull to drop into one thing fully. Switching out costs real energy — this may point toward attention that runs deep rather than wide.",
-    when: (l) => l.attention >= 0.62,
-  },
-  {
-    id: "parallel-attention",
-    label: "Parallel attention",
-    reading:
-      "You may recognize the sense of holding many channels at once. This may point toward an attention that moves in width rather than depth.",
-    when: (l) => l.attention <= 0.38,
-  },
-  {
-    id: "wave-energy",
-    label: "Wave-shaped energy",
-    reading:
-      "You may recognize surges of intensity followed by real recovery. This may point toward a rhythm shaped by waves, not a steady stream.",
-    when: (l) => l.rhythm <= 0.42,
-  },
-  {
-    id: "steady-current",
-    label: "Steady current",
-    reading:
-      "You may recognize the capacity to hold a working rhythm across long stretches. This may point toward energy that arrives as a stream.",
-    when: (l) => l.rhythm >= 0.6,
+    when: (l) => l.CI >= 0.62,
   },
   {
     id: "resonant-feeling",
     label: "Feeling as information",
     reading:
       "You may recognize emotion arriving fast and at volume, often before it can be named. This may point toward feeling that carries data, not noise.",
-    when: (l) => l.feeling >= 0.6,
+    when: (l) => l.ER >= 0.6,
   },
   {
     id: "high-resolution-sensing",
     label: "High-resolution sensing",
     reading:
       "You may recognize how the room shapes your thinking — light, sound, texture. This may point toward a sensory aperture that runs wide open.",
-    when: (l) => l.sensing >= 0.6,
-  },
-  {
-    id: "associative-mind",
-    label: "Associative understanding",
-    reading:
-      "You may recognize how new ideas land by linking to a web of what you already know. This may point toward thinking that connects rather than stacks.",
-    when: (l) => l.understanding >= 0.55,
+    when: (l) => l.SA >= 0.6,
   },
   {
     id: "cross-domain-making",
-    label: "Cross-domain making",
+    label: "Divergent making",
     reading:
       "You may recognize the pull to combine things that don't usually meet. This may point toward creative work that lives at intersections.",
-    when: (l) => l.making >= 0.6,
+    when: (l) => l.CD >= 0.6,
   },
   {
-    id: "intuitive-knowing",
-    label: "Intuitive knowing",
+    id: "meaning-seeking",
+    label: "Meaning-seeking mind",
     reading:
-      "You may recognize decisions that arrive before the reasoning. This may point toward choices that land in the body as much as the mind.",
-    when: (l) => l.deciding >= 0.6,
+      "You may recognize a life shaped by questions of meaning, self, and transformation. This may point toward existential drive as a defining current.",
+    when: (l) => l.ED >= 0.6,
   },
   {
-    id: "analytical-clarity",
-    label: "Analytical clarity",
+    id: "quiet-signal",
+    label: "Quiet signal",
     reading:
-      "You may recognize the pull toward structured reasoning and explicit weighing. This may point toward decisions that hold up when you show your work.",
-    when: (l) => l.deciding <= 0.4,
+      "You may recognize a steadier baseline — intensity is present but held quietly. Systems that ask you to perform intensity may not serve you.",
+    when: (l) => l.CI + l.ER + l.SA + l.CD + l.ED <= 1.6,
   },
 ];
 
@@ -114,13 +91,13 @@ function symbolicModeMatches(
   leans: FacetLean,
   heat: Partial<Record<CurrentId, number>>,
 ): SymbolicModeMatch[] {
-  // Weight each mode from facet leans; blend with current heat when present.
+  // Weight each mode from dimension leans; blend with current heat when present.
   const w: Record<ModeId, number> = {
-    flux: (1 - leans.attention) * 0.6 + (leans.making) * 0.4,
-    depth: leans.attention * 0.5 + leans.feeling * 0.3 + leans.understanding * 0.2,
-    signal: (1 - leans.deciding) * 0.5 + (1 - leans.making) * 0.3 + leans.rhythm * 0.2,
-    myth: leans.making * 0.4 + leans.feeling * 0.3 + leans.understanding * 0.3,
-    pulse: (1 - leans.rhythm) * 0.6 + leans.deciding * 0.4,
+    flux: leans.CD * 0.6 + leans.CI * 0.4,
+    depth: leans.CI * 0.5 + leans.ED * 0.3 + leans.ER * 0.2,
+    signal: (1 - leans.SA) * 0.4 + (1 - leans.CD) * 0.3 + leans.CI * 0.3,
+    myth: leans.CD * 0.4 + leans.ED * 0.35 + leans.ER * 0.25,
+    pulse: leans.SA * 0.5 + leans.ER * 0.3 + leans.CD * 0.2,
   };
   for (const id of Object.keys(w) as ModeId[]) {
     const h = heat[id];
@@ -153,7 +130,7 @@ function pickNote(leans: FacetLean, matches: SymbolicModeMatch[]): string {
     pulse: "This reading moves in loops. Consider stopping after the next small loop to notice what it taught, before starting another.",
   };
   const base = primary ? noteByMode[primary] : "Notice which of these motifs still resonates a week from now.";
-  const feeling = leans.feeling >= 0.65
+  const feeling = leans.ER >= 0.65
     ? " If feeling arrives at high volume, let the wave move through before deciding what it means."
     : "";
   return base + feeling;
@@ -162,6 +139,7 @@ function pickNote(leans: FacetLean, matches: SymbolicModeMatch[]): string {
 export function buildMirror(
   leans: FacetLean,
   heat: Partial<Record<CurrentId, number>>,
+  scores: DimensionScores,
 ): MirrorReading {
   const motifs = MOTIF_TEMPLATES.filter((t) => t.when(leans)).map((t) => ({
     id: t.id,
@@ -170,5 +148,7 @@ export function buildMirror(
   }));
   const symbolicModes = symbolicModeMatches(leans, heat);
   const note = pickNote(leans, symbolicModes);
-  return { motifs, currentHeat: heat, symbolicModes, note };
+  const index = sparkIndex(scores);
+  const profile = sparkProfile(index);
+  return { motifs, currentHeat: heat, symbolicModes, note, scores, index, profile };
 }
