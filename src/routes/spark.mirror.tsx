@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { CurrentsRing } from "@/components/spark/CurrentsRing";
+import { SparkRadar } from "@/components/spark/SparkRadar";
 import { PROMPTS } from "@/lib/spark/prompts";
-import { leansFrom } from "@/lib/spark/resonance";
+import { leansFrom, dimensionScoresFrom } from "@/lib/spark/resonance";
+import { FACETS } from "@/lib/spark/facets";
 import { currentHeatFrom } from "@/lib/spark/currentPrompts";
 import { buildMirror, type MirrorReading } from "@/lib/spark/mirror";
 import { sparkResponsesStore, currentResponsesStore } from "@/lib/spark/store";
@@ -33,8 +35,9 @@ function MirrorPage() {
       return;
     }
     const leans = leansFrom(responses);
+    const scores = dimensionScoresFrom(responses);
     const heat = currentHeatFrom(currents);
-    setMirror(buildMirror(leans, heat));
+    setMirror(buildMirror(leans, heat, scores));
   }, []);
 
   const affinities = useMemo(() => {
@@ -93,6 +96,40 @@ function MirrorPage() {
         <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground italic">
           A mirror, not a verdict. Read what resonates; leave what doesn't. Nothing here evaluates you.
         </p>
+      </div>
+
+      <div className="glass-panel rounded-3xl p-6 sm:p-10 fade-up">
+        <div className="grid gap-8 sm:grid-cols-[auto_1fr] items-center">
+          <div className="flex justify-center">
+            <SparkRadar scores={mirror.scores} size={340} />
+          </div>
+          <div>
+            <p className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground mb-3">
+              Spark Index · {mirror.index} of 20
+            </p>
+            <h2 className="font-display text-3xl leading-tight">
+              {mirror.profile.name}
+            </h2>
+            <p className="mt-4 text-sm text-foreground/90 leading-relaxed">
+              {mirror.profile.description}
+            </p>
+            <p className="mt-4 text-xs italic text-muted-foreground leading-relaxed">
+              {mirror.profile.note}
+            </p>
+            <ul className="mt-6 space-y-2 text-xs text-muted-foreground">
+              {FACETS.map((f) => (
+                <li key={f.id} className="flex items-center gap-3">
+                  <span className="inline-flex h-5 w-8 items-center justify-center rounded-full text-[9px] tracking-[0.18em]"
+                        style={{ background: `${f.accent} / 0.12`, color: f.accent, border: `1px solid ${f.accent}` }}>
+                    {f.id}
+                  </span>
+                  <span className="flex-1">{f.short}</span>
+                  <span className="tabular-nums text-foreground/90">{mirror.scores[f.id].toFixed(1)} / 4</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
 
       <div className="glass-panel rounded-3xl p-6 sm:p-10 flex flex-col items-center fade-up">
