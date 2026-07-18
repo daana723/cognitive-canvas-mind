@@ -120,7 +120,7 @@ function MirrorPage() {
               {FACETS.map((f) => (
                 <li key={f.id} className="flex items-center gap-3">
                   <span className="inline-flex h-5 w-8 items-center justify-center rounded-full text-[9px] tracking-[0.18em]"
-                        style={{ background: `${f.accent} / 0.12`, color: f.accent, border: `1px solid ${f.accent}` }}>
+                        style={{ color: f.accent, border: `1px solid ${f.accent}` }}>
                     {f.id}
                   </span>
                   <span className="flex-1">{f.short}</span>
