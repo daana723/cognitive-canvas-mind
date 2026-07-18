@@ -67,6 +67,22 @@ export interface LoomRunResponse {
   externalCalls: [];
 }
 
+export interface LoomWeaveRecord {
+  id: string;
+  createdAt: string;
+  intention: string;
+  tags: string[];
+  plan: unknown;
+}
+
+export interface LoomModuleRunRecord {
+  id: string;
+  createdAt: string;
+  moduleId: string;
+  inputs: Record<string, unknown>;
+  response: LoomRunResponse;
+}
+
 export interface WorkflowTemplateSummary {
   id: string;
   label: string;

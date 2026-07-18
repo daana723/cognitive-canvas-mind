@@ -16,11 +16,15 @@ import { Route as SnapshotsRouteImport } from './routes/snapshots'
 import { Route as ReflectionsRouteImport } from './routes/reflections'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as LoomRouteImport } from './routes/loom'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SparkIndexRouteImport } from './routes/spark.index'
+import { Route as LoomIndexRouteImport } from './routes/loom.index'
 import { Route as SparkReflectRouteImport } from './routes/spark.reflect'
 import { Route as SparkMirrorRouteImport } from './routes/spark.mirror'
 import { Route as SparkCurrentsRouteImport } from './routes/spark.currents'
+import { Route as LoomConstellationRouteImport } from './routes/loom.constellation'
+import { Route as LoomModuleIdRouteImport } from './routes/loom.$moduleId'
 
 const WorkflowsRoute = WorkflowsRouteImport.update({
   id: '/workflows',
@@ -57,6 +61,11 @@ const MapRoute = MapRouteImport.update({
   path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoomRoute = LoomRouteImport.update({
+  id: '/loom',
+  path: '/loom',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -66,6 +75,11 @@ const SparkIndexRoute = SparkIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => SparkRoute,
+} as any)
+const LoomIndexRoute = LoomIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LoomRoute,
 } as any)
 const SparkReflectRoute = SparkReflectRouteImport.update({
   id: '/reflect',
@@ -82,9 +96,20 @@ const SparkCurrentsRoute = SparkCurrentsRouteImport.update({
   path: '/currents',
   getParentRoute: () => SparkRoute,
 } as any)
+const LoomConstellationRoute = LoomConstellationRouteImport.update({
+  id: '/constellation',
+  path: '/constellation',
+  getParentRoute: () => LoomRoute,
+} as any)
+const LoomModuleIdRoute = LoomModuleIdRouteImport.update({
+  id: '/$moduleId',
+  path: '/$moduleId',
+  getParentRoute: () => LoomRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/loom': typeof LoomRouteWithChildren
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
@@ -92,9 +117,12 @@ export interface FileRoutesByFullPath {
   '/spark': typeof SparkRouteWithChildren
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/loom/$moduleId': typeof LoomModuleIdRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
+  '/loom/': typeof LoomIndexRoute
   '/spark/': typeof SparkIndexRoute
 }
 export interface FileRoutesByTo {
@@ -105,14 +133,18 @@ export interface FileRoutesByTo {
   '/snapshots': typeof SnapshotsRoute
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/loom/$moduleId': typeof LoomModuleIdRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
+  '/loom': typeof LoomIndexRoute
   '/spark': typeof SparkIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/loom': typeof LoomRouteWithChildren
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
@@ -120,15 +152,19 @@ export interface FileRoutesById {
   '/spark': typeof SparkRouteWithChildren
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/loom/$moduleId': typeof LoomModuleIdRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
+  '/loom/': typeof LoomIndexRoute
   '/spark/': typeof SparkIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/loom'
     | '/map'
     | '/modes'
     | '/reflections'
@@ -136,9 +172,12 @@ export interface FileRouteTypes {
     | '/spark'
     | '/timing'
     | '/workflows'
+    | '/loom/$moduleId'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
+    | '/loom/'
     | '/spark/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -149,13 +188,17 @@ export interface FileRouteTypes {
     | '/snapshots'
     | '/timing'
     | '/workflows'
+    | '/loom/$moduleId'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
+    | '/loom'
     | '/spark'
   id:
     | '__root__'
     | '/'
+    | '/loom'
     | '/map'
     | '/modes'
     | '/reflections'
@@ -163,14 +206,18 @@ export interface FileRouteTypes {
     | '/spark'
     | '/timing'
     | '/workflows'
+    | '/loom/$moduleId'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
+    | '/loom/'
     | '/spark/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoomRoute: typeof LoomRouteWithChildren
   MapRoute: typeof MapRoute
   ModesRoute: typeof ModesRoute
   ReflectionsRoute: typeof ReflectionsRoute
@@ -231,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loom': {
+      id: '/loom'
+      path: '/loom'
+      fullPath: '/loom'
+      preLoaderRoute: typeof LoomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -244,6 +298,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/spark/'
       preLoaderRoute: typeof SparkIndexRouteImport
       parentRoute: typeof SparkRoute
+    }
+    '/loom/': {
+      id: '/loom/'
+      path: '/'
+      fullPath: '/loom/'
+      preLoaderRoute: typeof LoomIndexRouteImport
+      parentRoute: typeof LoomRoute
     }
     '/spark/reflect': {
       id: '/spark/reflect'
@@ -266,8 +327,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparkCurrentsRouteImport
       parentRoute: typeof SparkRoute
     }
+    '/loom/constellation': {
+      id: '/loom/constellation'
+      path: '/constellation'
+      fullPath: '/loom/constellation'
+      preLoaderRoute: typeof LoomConstellationRouteImport
+      parentRoute: typeof LoomRoute
+    }
+    '/loom/$moduleId': {
+      id: '/loom/$moduleId'
+      path: '/$moduleId'
+      fullPath: '/loom/$moduleId'
+      preLoaderRoute: typeof LoomModuleIdRouteImport
+      parentRoute: typeof LoomRoute
+    }
   }
 }
+
+interface LoomRouteChildren {
+  LoomModuleIdRoute: typeof LoomModuleIdRoute
+  LoomConstellationRoute: typeof LoomConstellationRoute
+  LoomIndexRoute: typeof LoomIndexRoute
+}
+
+const LoomRouteChildren: LoomRouteChildren = {
+  LoomModuleIdRoute: LoomModuleIdRoute,
+  LoomConstellationRoute: LoomConstellationRoute,
+  LoomIndexRoute: LoomIndexRoute,
+}
+
+const LoomRouteWithChildren = LoomRoute._addFileChildren(LoomRouteChildren)
 
 interface SparkRouteChildren {
   SparkCurrentsRoute: typeof SparkCurrentsRoute
@@ -287,6 +376,7 @@ const SparkRouteWithChildren = SparkRoute._addFileChildren(SparkRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoomRoute: LoomRouteWithChildren,
   MapRoute: MapRoute,
   ModesRoute: ModesRoute,
   ReflectionsRoute: ReflectionsRoute,

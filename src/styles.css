@@ -1,13 +1,13 @@
-@import "tailwindcss" source(none);
+﻿@import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Cognitive Layer — design system.
+ * Cognitive Layer â€” design system.
  * Twilight palette: deep indigo void, soft violet/cyan/blush auroras.
- * Calm, reflective, premium — a cognitive mirror, not a productivity app.
+ * Calm, reflective, premium â€” a cognitive mirror, not a productivity app.
  */
 
 @theme inline {
@@ -49,7 +49,7 @@
 :root {
   --radius: 0.75rem;
 
-  /* Indigo twilight — deeper void, more vivid auroras */
+  /* Indigo twilight â€” deeper void, more vivid auroras */
   --background: oklch(0.13 0.05 275);
   --foreground: oklch(0.98 0.015 280);
 
@@ -98,6 +98,8 @@
     oklch(0.78 0.22 290),
     oklch(0.74 0.22 325)
   );
+
+  --gradient-veil: linear-gradient(135deg, oklch(0.78 0.2 290 / 0.18), oklch(0.84 0.16 215 / 0.12));
 
   --gradient-mirror: linear-gradient(
     180deg,
@@ -193,3 +195,12 @@
 @utility fade-up {
   animation: fade-up var(--transition-calm) ease-out both;
 }
+@keyframes pulse-thread {
+  0%, 100% { opacity: 0.18; }
+  50% { opacity: 0.7; }
+}
+
+@utility pulse-thread {
+  animation: pulse-thread 8s ease-in-out infinite;
+}
+

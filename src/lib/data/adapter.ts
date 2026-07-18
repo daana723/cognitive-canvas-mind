@@ -1,8 +1,10 @@
-import { studioStore, type StudioState } from "@/lib/studio/store";
+﻿import { studioStore, type StudioState } from "@/lib/studio/store";
 import {
   ok,
   unavailable,
   type CurrentsReading,
+  type LoomModuleRunRecord,
+  type LoomWeaveRecord,
   type Result,
   type SparkSketch,
 } from "@/lib/data/types";
@@ -18,10 +20,16 @@ export interface DataAdapter {
   saveCurrents(reading: CurrentsReading): Promise<Result<CurrentsReading>>;
   getLoomState(): Promise<Result<StudioState>>;
   saveLoomState(state: StudioState): Promise<Result<StudioState>>;
+  saveWeave(record: LoomWeaveRecord): Promise<Result<LoomWeaveRecord>>;
+  listWeaves(): Promise<Result<LoomWeaveRecord[]>>;
+  saveModuleRun(record: LoomModuleRunRecord): Promise<Result<LoomModuleRunRecord>>;
+  listModuleRuns(): Promise<Result<LoomModuleRunRecord[]>>;
 }
 
 const SPARK_KEY = "creative-studio:spark-sketch:v1";
 const CURRENTS_KEY = "creative-studio:currents:v1";
+const WEAVES_KEY = "nls:weaves:v1";
+const MODULE_RUNS_KEY = "nls:module-runs:v1";
 
 const isBrowser = () =>
   typeof window !== "undefined" && typeof localStorage !== "undefined";
@@ -45,6 +53,14 @@ function writeJson<T>(key: string, value: T) {
   }
 }
 
+const listJson = <T,>(key: string) => readJson<T[]>(key) ?? [];
+
+const prependJson = <T,>(key: string, value: T, limit = 20) => {
+  const next = [value, ...listJson<T>(key)].slice(0, limit);
+  writeJson(key, next);
+  return next;
+};
+
 export const localAdapter: DataAdapter = {
   async getSparkSketch() {
     return ok(readJson<SparkSketch>(SPARK_KEY));
@@ -67,10 +83,24 @@ export const localAdapter: DataAdapter = {
     studioStore.save(state);
     return ok(state);
   },
+  async saveWeave(record) {
+    prependJson(WEAVES_KEY, record);
+    return ok(record);
+  },
+  async listWeaves() {
+    return ok(listJson<LoomWeaveRecord>(WEAVES_KEY));
+  },
+  async saveModuleRun(record) {
+    prependJson(MODULE_RUNS_KEY, record);
+    return ok(record);
+  },
+  async listModuleRuns() {
+    return ok(listJson<LoomModuleRunRecord>(MODULE_RUNS_KEY));
+  },
 };
 
 const remoteUnavailable = () =>
-  unavailable("Backend not connected — using local state.");
+  unavailable("Backend not connected - using local state.");
 
 export const remoteAdapter: DataAdapter = {
   async getSparkSketch() { return remoteUnavailable(); },
@@ -79,6 +109,10 @@ export const remoteAdapter: DataAdapter = {
   async saveCurrents() { return remoteUnavailable(); },
   async getLoomState() { return remoteUnavailable(); },
   async saveLoomState() { return remoteUnavailable(); },
+  async saveWeave() { return remoteUnavailable(); },
+  async listWeaves() { return remoteUnavailable(); },
+  async saveModuleRun() { return remoteUnavailable(); },
+  async listModuleRuns() { return remoteUnavailable(); },
 };
 
 export const dataAdapter: DataAdapter = localAdapter;

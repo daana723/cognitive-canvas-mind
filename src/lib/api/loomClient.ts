@@ -10,7 +10,10 @@
   type SparkSketch,
   type WorkflowTemplateSummary,
 } from "@/lib/data/types";
-import { listLoomModules, listLoomWorkflows, runLoom } from "@/lib/core/loom";
+import { listLoomWorkflows } from "@/lib/core/loom";
+import { LOOM_MODULES } from "@/lib/loom/modules";
+import { runModule } from "@/lib/loom/execute";
+import { weave, type WeaveIntentionRequest, type WeavePlan } from "@/lib/loom/orchestrator";
 
 /**
  * Local-first Loom client. The same contract can later be backed by HTTP,
@@ -30,6 +33,8 @@ export interface SparkMirrorRequest {
   sketch: SparkSketch;
 }
 
+const USE_REMOTE_LOOM = false;
+
 const modeOrder: ModeId[] = ["flux", "depth", "signal", "myth", "pulse"];
 
 const topModes = (affinities: Partial<Record<ModeId, number>>) =>
@@ -48,13 +53,22 @@ const motifFromText = (text: string) => {
 
 export const loomClient = {
   async listModules(): Promise<Result<LoomModule[]>> {
-    return ok(listLoomModules());
+    return ok(LOOM_MODULES);
   },
   async listWorkflows(): Promise<Result<WorkflowTemplateSummary[]>> {
     return ok(listLoomWorkflows());
   },
+  async weave(req: WeaveIntentionRequest): Promise<Result<WeavePlan>> {
+    if (USE_REMOTE_LOOM) {
+      // Future seam: route to a backend without changing UI callers.
+    }
+    return ok(weave(req));
+  },
   async run(req: LoomRunRequest): Promise<Result<LoomRunResponse>> {
-    return ok(runLoom(req));
+    if (USE_REMOTE_LOOM) {
+      // Future seam: route to a backend without changing UI callers.
+    }
+    return ok(runModule(req));
   },
   async reflect(req: SparkReflectRequest): Promise<Result<SparkSketch>> {
     const combined = `${req.prompt} ${req.body}`.trim();

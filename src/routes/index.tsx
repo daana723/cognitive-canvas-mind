@@ -1,14 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { AuroraField } from "@/components/AuroraField";
 import { MODES } from "@/lib/modes/modes";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nonlinear Studio — a creative cognitive layer" },
+      { title: "Nonlinear Studio â€” a creative cognitive layer" },
       { name: "description", content: "A creative cognitive layer for nonlinear thinkers. Two doors: SPARK, a reflective mirror; Loom, a practical workspace. Local-first. Non-diagnostic." },
       { property: "og:title", content: "Nonlinear Studio" },
-      { property: "og:description", content: "SPARK reflection · Loom workspace. A studio for nonlinear thinkers, not a verdict about them." },
+      { property: "og:description", content: "SPARK reflection Â· Loom workspace. A studio for nonlinear thinkers, not a verdict about them." },
     ],
   }),
   component: Landing,
@@ -30,6 +30,7 @@ function Landing() {
             { to: "/modes", label: "Modes" },
             { to: "/map", label: "Map" },
             { to: "/workflows", label: "Workflows" },
+            { to: "/loom", label: "Loom" },
             { to: "/reflections", label: "Reflections" },
             { to: "/snapshots", label: "Snapshots" },
           ].map((l) => (
@@ -52,9 +53,9 @@ function Landing() {
           <span className="text-thread italic">nonlinear thinkers.</span>
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg sm:text-xl leading-relaxed text-muted-foreground fade-up" style={{ animationDelay: "180ms" }}>
-          Two equal doors. SPARK is a reflective mirror — a deep, guided
+          Two equal doors. SPARK is a reflective mirror â€” a deep, guided
           reflection for recognizing patterns in how you create, sense, decide,
-          and move through ideas. Loom is a practical workspace — for turning
+          and move through ideas. Loom is a practical workspace â€” for turning
           scattered ideas into finished outputs. Nothing is inferred about you.
         </p>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 fade-up" style={{ animationDelay: "280ms" }}>
@@ -73,11 +74,11 @@ function Landing() {
               sense, decide, and move through ideas. Deep, careful, non-diagnostic.
             </p>
             <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
-              Enter the reflection →
+              Enter the reflection â†’
             </p>
           </Link>
           <Link
-            to="/modes"
+            to="/loom"
             className="glass-panel group relative rounded-3xl p-8 text-left transition-calm hover:-translate-y-1"
           >
             <p className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground">
@@ -87,16 +88,15 @@ function Landing() {
               Open the <span className="text-thread italic">Loom</span> workspace
             </h2>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              A workspace for nonlinear making. Choose a mode, pull scattered
-              ideas onto a map, run a workflow, keep what you notice.
+              The weaving layer: one orchestrator and a constellation of agents that turn scattered intention into structured creative action.
             </p>
             <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
-              Open the workspace →
+              Open the Loom â†’
             </p>
           </Link>
         </div>
         <p className="mt-10 text-xs text-muted-foreground">
-          Local-first · nothing leaves your device
+          Local-first Â· nothing leaves your device
         </p>
       </section>
 
@@ -106,11 +106,11 @@ function Landing() {
             <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground mb-3">
               Five creative currents
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl">Modes you choose — never modes assigned.</h2>
+            <h2 className="font-display text-3xl sm:text-4xl">Modes you choose â€” never modes assigned.</h2>
           </div>
           <p className="hidden max-w-sm text-sm text-muted-foreground sm:block">
             The studio organizes ideas, projects, and creative states. It does not
-            categorize you. Each mode is a symbolic current — pick whichever fits
+            categorize you. Each mode is a symbolic current â€” pick whichever fits
             this moment.
           </p>
         </div>
@@ -144,9 +144,9 @@ function Landing() {
           The orientation
         </p>
         <p className="font-display text-2xl sm:text-3xl leading-relaxed text-foreground/90">
-          Choose <span className="text-muted-foreground">→</span> Map{" "}
-          <span className="text-muted-foreground">→</span> Make{" "}
-          <span className="text-muted-foreground">→</span> Notice.
+          Choose <span className="text-muted-foreground">â†’</span> Map{" "}
+          <span className="text-muted-foreground">â†’</span> Make{" "}
+          <span className="text-muted-foreground">â†’</span> Notice.
         </p>
         <p className="mt-6 text-base text-muted-foreground leading-relaxed">
           Replace certainty with exploration. Replace labels with narratives.
@@ -155,8 +155,11 @@ function Landing() {
       </section>
 
       <footer className="relative z-10 border-t border-border/30 py-10 text-center text-xs tracking-[0.18em] uppercase text-muted-foreground">
-        Creative Studio · a workspace, not a verdict
+        Creative Studio Â· a workspace, not a verdict
       </footer>
     </main>
   );
 }
+
+
+
