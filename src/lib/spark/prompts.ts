@@ -1,48 +1,55 @@
 import type { FacetId } from "./facets";
 
 /**
- * Reflection prompts — 3 per facet. Each is a first-person recognition
- * statement. The user chooses how much it rings true. Nothing is scored
- * or evaluated — resonance is stored so patterns can be surfaced later.
+ * SPARK prompts — 5 per dimension, 25 total. Each prompt is a first-person
+ * recognition statement. The 1–5 Likert resonance is stored per prompt and
+ * then averaged into a per-dimension score (0–4) at read time.
  */
 
 export type Resonance = 1 | 2 | 3 | 4 | 5;
 
 export interface Prompt {
   id: string;
-  facet: FacetId;
+  facet: FacetId; // SPARK dimension id (CI/ER/SA/CD/ED)
   prompt: string;
   reverse?: boolean;
 }
 
 export const PROMPTS: Prompt[] = [
-  { id: "a1", facet: "attention", prompt: "When something interests me, I can lose track of hours inside it." },
-  { id: "a2", facet: "attention", prompt: "My mind moves between many ideas at once, and that feels natural.", reverse: true },
-  { id: "a3", facet: "attention", prompt: "Switching tasks before I'm 'done' costs me real effort." },
+  // D1 — Cognitive Intensity
+  { id: "ci1", facet: "CI", prompt: "I can spend hours absorbed in a single topic without noticing time passing." },
+  { id: "ci2", facet: "CI", prompt: "I often see connections between things that seem unrelated to others." },
+  { id: "ci3", facet: "CI", prompt: "My mind races with ideas faster than I can express them." },
+  { id: "ci4", facet: "CI", prompt: "I prefer deep, complex topics over simple, straightforward ones." },
+  { id: "ci5", facet: "CI", prompt: "I understand new things by linking them to a wider web of what I already know." },
 
-  { id: "r1", facet: "rhythm", prompt: "My energy comes in waves — bursts of intensity followed by quiet recovery.", reverse: true },
-  { id: "r2", facet: "rhythm", prompt: "I can hold a steady working rhythm across a full day." },
-  { id: "r3", facet: "rhythm", prompt: "Forcing output when the wave isn't there usually backfires.", reverse: true },
+  // D2 — Emotional Resonance
+  { id: "er1", facet: "ER", prompt: "I feel others' emotions as if they were my own." },
+  { id: "er2", facet: "ER", prompt: "I have experienced grief or joy so intense it felt physical." },
+  { id: "er3", facet: "ER", prompt: "I can be moved to tears by music, art, or stories." },
+  { id: "er4", facet: "ER", prompt: "I sometimes feel overwhelmed by the suffering in the world." },
+  { id: "er5", facet: "ER", prompt: "My emotional responses are often stronger than others expect." },
 
-  { id: "f1", facet: "feeling", prompt: "Emotions arrive quickly and at high volume." },
-  { id: "f2", facet: "feeling", prompt: "I often feel a situation before I can name what it is." },
-  { id: "f3", facet: "feeling", prompt: "I tend to process feelings later, in retrospect.", reverse: true },
+  // D3 — Sensory Amplification
+  { id: "sa1", facet: "SA", prompt: "Certain textures, sounds, or smells can overwhelm me." },
+  { id: "sa2", facet: "SA", prompt: "I am deeply affected by my physical environment." },
+  { id: "sa3", facet: "SA", prompt: "I notice sensory details that others seem to miss." },
+  { id: "sa4", facet: "SA", prompt: "I have strong preferences about food, clothing, or aesthetics." },
+  { id: "sa5", facet: "SA", prompt: "Bright lights, loud noises, or strong smells can be painful." },
 
-  { id: "s1", facet: "sensing", prompt: "Lighting, sound, and texture shape my ability to think clearly." },
-  { id: "s2", facet: "sensing", prompt: "Background noise that others don't notice can occupy my attention." },
-  { id: "s3", facet: "sensing", prompt: "I generally don't notice subtle changes in my environment.", reverse: true },
+  // D4 — Creative Divergence
+  { id: "cd1", facet: "CD", prompt: "I often think in metaphors and images rather than words." },
+  { id: "cd2", facet: "CD", prompt: "I come up with ideas that others find strange or unusual." },
+  { id: "cd3", facet: "CD", prompt: "I see multiple possible solutions to every problem." },
+  { id: "cd4", facet: "CD", prompt: "I sometimes struggle to explain my thinking process to others." },
+  { id: "cd5", facet: "CD", prompt: "I prefer to find my own way rather than follow instructions." },
 
-  { id: "u1", facet: "understanding", prompt: "I understand new things by connecting them to other things I already know." },
-  { id: "u2", facet: "understanding", prompt: "Step-by-step instructions feel clearer to me than a big picture.", reverse: true },
-  { id: "u3", facet: "understanding", prompt: "I often see how unrelated fields share an underlying pattern." },
-
-  { id: "m1", facet: "making", prompt: "My best ideas come from combining things that don't usually meet." },
-  { id: "m2", facet: "making", prompt: "I'd rather refine one thing deeply than start something new.", reverse: true },
-  { id: "m3", facet: "making", prompt: "I think in metaphors, images, or systems more than in lists." },
-
-  { id: "d1", facet: "deciding", prompt: "I often know an answer before I can explain why." },
-  { id: "d2", facet: "deciding", prompt: "I trust structured analysis over a gut feeling.", reverse: true },
-  { id: "d3", facet: "deciding", prompt: "Big decisions land in my body as much as in my thinking." },
+  // D5 — Existential Drive
+  { id: "ed1", facet: "ED", prompt: "I often think about the meaning and purpose of life." },
+  { id: "ed2", facet: "ED", prompt: "I feel a strong need to understand myself at a deep level." },
+  { id: "ed3", facet: "ED", prompt: "I sometimes feel like I don't fit into the world around me." },
+  { id: "ed4", facet: "ED", prompt: "I have experienced periods of intense inner transformation." },
+  { id: "ed5", facet: "ED", prompt: "Big questions about existence show up in my day-to-day thinking." },
 ];
 
 export const RESONANCE_LABELS: Record<Resonance, string> = {
