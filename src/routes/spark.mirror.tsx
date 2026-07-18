@@ -14,7 +14,10 @@ export const Route = createFileRoute("/spark/mirror")({
   head: () => ({
     meta: [
       { title: "Your pattern sketch — SPARK" },
-      { name: "description", content: "A mirror of motifs, currents, and symbolic modes you may recognize." },
+      {
+        name: "description",
+        content: "A mirror of motifs, currents, and symbolic modes you may recognize.",
+      },
     ],
   }),
   component: MirrorPage,
@@ -70,7 +73,11 @@ function MirrorPage() {
           <Link
             to="/spark/reflect"
             className="mt-8 inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm tracking-[0.18em] uppercase transition-calm"
-            style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)", boxShadow: "var(--shadow-glow)" }}
+            style={{
+              background: "var(--gradient-thread)",
+              color: "oklch(0.14 0.04 270)",
+              boxShadow: "var(--shadow-glow)",
+            }}
           >
             Enter the reflection →
           </Link>
@@ -91,7 +98,8 @@ function MirrorPage() {
           What you <span className="text-thread italic">may recognize.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground italic">
-          A mirror, not a verdict. Read what resonates; leave what doesn't. Nothing here evaluates you.
+          A mirror, not a verdict. Read what resonates; leave what doesn't. Nothing here evaluates
+          you.
         </p>
       </div>
 
@@ -134,7 +142,10 @@ function MirrorPage() {
                   <img src={mode.image} alt="" className="h-full w-full object-cover" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[10px] tracking-[0.24em] uppercase" style={{ color: mode.accent }}>
+                  <p
+                    className="text-[10px] tracking-[0.24em] uppercase"
+                    style={{ color: mode.accent }}
+                  >
                     You may recognize
                   </p>
                   <p className="mt-1 font-display text-xl">{mode.label}</p>
@@ -162,7 +173,11 @@ function MirrorPage() {
           onClick={saveSketch}
           disabled={saved}
           className="inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm tracking-[0.18em] uppercase transition-calm disabled:opacity-60"
-          style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)", boxShadow: "var(--shadow-glow)" }}
+          style={{
+            background: "var(--gradient-thread)",
+            color: "oklch(0.14 0.04 270)",
+            boxShadow: "var(--shadow-glow)",
+          }}
         >
           {saved ? "Kept as a sketch" : "Keep this sketch"}
         </button>

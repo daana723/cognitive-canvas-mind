@@ -1,4 +1,4 @@
-import type { ModeId } from "../modes/modes";
+﻿import type { ModeId } from "../modes/modes";
 import type { PhaseId } from "../modes/phases";
 
 export interface Snapshot {
@@ -9,8 +9,16 @@ export interface Snapshot {
   createdAt: string;
 }
 
-export interface Reflection { id: string; body: string; createdAt: string; }
-export interface NarrativeNode { id: string; text: string; createdAt: string; }
+export interface Reflection {
+  id: string;
+  body: string;
+  createdAt: string;
+}
+export interface NarrativeNode {
+  id: string;
+  text: string;
+  createdAt: string;
+}
 
 export interface StudioState {
   currentMode?: ModeId;
@@ -44,19 +52,27 @@ export const studioStore = {
       if (!raw) return empty;
       const parsed = JSON.parse(raw) as StudioState;
       return { ...empty, ...parsed };
-    } catch { return empty; }
+    } catch {
+      return empty;
+    }
   },
   save(state: StudioState) {
     if (!isBrowser()) return;
     const next = { ...state, updatedAt: new Date().toISOString() };
-    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {}
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      // localStorage writes are best-effort; keep the studio usable without persistence.
+    }
   },
   update(mutator: (s: StudioState) => StudioState) {
     const next = mutator(this.load());
     this.save(next);
     return next;
   },
-  clear() { if (isBrowser()) localStorage.removeItem(KEY); },
+  clear() {
+    if (isBrowser()) localStorage.removeItem(KEY);
+  },
 };
 
 export const newId = () =>

@@ -7,13 +7,7 @@
  */
 
 export type FacetId =
-  | "attention"
-  | "rhythm"
-  | "feeling"
-  | "sensing"
-  | "understanding"
-  | "making"
-  | "deciding";
+  "attention" | "rhythm" | "feeling" | "sensing" | "understanding" | "making" | "deciding";
 
 export interface Facet {
   id: FacetId;

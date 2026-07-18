@@ -29,75 +29,31 @@ export interface MirrorResult {
   note?: string;
 }
 
-export interface LoomModuleInput {
-  id: string;
-  label: string;
-  kind: "text" | "longtext" | "select" | "tags";
-  placeholder?: string;
-  options?: string[];
-}
-
-export interface LoomModule {
-  id: string;
-  label: string;
-  blurb: string;
-  status: "stub" | "ready";
-  inputs: LoomModuleInput[];
-}
-
-export interface LoomRunRequest {
-  moduleId: string;
-  inputs: Record<string, unknown>;
-  context?: Record<string, unknown>;
-}
-
-export interface LoomRunResponse {
-  runId: string;
-  moduleId: string;
-  label: string;
-  summary: string;
-  outputs: Record<string, unknown>;
-  workflow: Array<{
-    id: string;
-    label: string;
-    description: string;
-  }>;
-  nextAction: string;
-  packet?: unknown;
-  externalCalls: [];
-}
-
-export interface LoomWeaveRecord {
-  id: string;
-  createdAt: string;
-  intention: string;
-  tags: string[];
-  plan: unknown;
-}
-
-export interface LoomModuleRunRecord {
-  id: string;
-  createdAt: string;
-  moduleId: string;
-  inputs: Record<string, unknown>;
-  response: LoomRunResponse;
-}
-
-export interface WorkflowTemplateSummary {
-  id: string;
-  label: string;
-  moduleId?: string;
-  modeId?: ModeId;
-  steps: Array<{
-    id: string;
-    label: string;
-    description?: string;
-  }>;
-}
+export type {
+  LoomExecutionMetadata,
+  LoomModule,
+  LoomModuleId,
+  LoomModuleInput,
+  LoomModuleRunRecord,
+  LoomProvider,
+  LoomProviderId,
+  LoomRunOptions,
+  LoomRunPacket,
+  LoomRunRequest,
+  LoomRunResponse,
+  LoomRunStatus,
+  LoomStructuredError,
+  LoomWeaveRecord,
+  LoomWorkflowHandler,
+  LoomWorkflowStep,
+  WeaveIntentionRequest,
+  WeavePlan,
+  WeaveStep,
+  WorkflowTemplateSummary,
+} from "@/lib/loom/types";
 
 export type Result<T> =
-  | { ok: true; data: T }
-  | { ok: false; reason: "unavailable"; message: string };
+  { ok: true; data: T } | { ok: false; reason: "unavailable"; message: string };
 
 export const unavailable = (message: string): Result<never> => ({
   ok: false,

@@ -10,10 +10,11 @@
   type SparkSketch,
   type WorkflowTemplateSummary,
 } from "@/lib/data/types";
-import { listLoomWorkflows } from "@/lib/core/loom";
+import { listLoomWorkflows } from "@/lib/loom";
 import { LOOM_MODULES } from "@/lib/loom/modules";
 import { runModule } from "@/lib/loom/execute";
-import { weave, type WeaveIntentionRequest, type WeavePlan } from "@/lib/loom/orchestrator";
+import { weave } from "@/lib/loom/orchestrator";
+import type { WeaveIntentionRequest, WeavePlan } from "@/lib/loom/types";
 
 /**
  * Local-first Loom client. The same contract can later be backed by HTTP,

@@ -31,8 +31,7 @@ const CURRENTS_KEY = "creative-studio:currents:v1";
 const WEAVES_KEY = "nls:weaves:v1";
 const MODULE_RUNS_KEY = "nls:module-runs:v1";
 
-const isBrowser = () =>
-  typeof window !== "undefined" && typeof localStorage !== "undefined";
+const isBrowser = () => typeof window !== "undefined" && typeof localStorage !== "undefined";
 
 function readJson<T>(key: string): T | null {
   if (!isBrowser()) return null;
@@ -53,9 +52,9 @@ function writeJson<T>(key: string, value: T) {
   }
 }
 
-const listJson = <T,>(key: string) => readJson<T[]>(key) ?? [];
+const listJson = <T>(key: string) => readJson<T[]>(key) ?? [];
 
-const prependJson = <T,>(key: string, value: T, limit = 20) => {
+const prependJson = <T>(key: string, value: T, limit = 20) => {
   const next = [value, ...listJson<T>(key)].slice(0, limit);
   writeJson(key, next);
   return next;
@@ -99,20 +98,39 @@ export const localAdapter: DataAdapter = {
   },
 };
 
-const remoteUnavailable = () =>
-  unavailable("Backend not connected - using local state.");
+const remoteUnavailable = () => unavailable("Backend not connected - using local state.");
 
 export const remoteAdapter: DataAdapter = {
-  async getSparkSketch() { return remoteUnavailable(); },
-  async saveSparkSketch() { return remoteUnavailable(); },
-  async getCurrents() { return remoteUnavailable(); },
-  async saveCurrents() { return remoteUnavailable(); },
-  async getLoomState() { return remoteUnavailable(); },
-  async saveLoomState() { return remoteUnavailable(); },
-  async saveWeave() { return remoteUnavailable(); },
-  async listWeaves() { return remoteUnavailable(); },
-  async saveModuleRun() { return remoteUnavailable(); },
-  async listModuleRuns() { return remoteUnavailable(); },
+  async getSparkSketch() {
+    return remoteUnavailable();
+  },
+  async saveSparkSketch() {
+    return remoteUnavailable();
+  },
+  async getCurrents() {
+    return remoteUnavailable();
+  },
+  async saveCurrents() {
+    return remoteUnavailable();
+  },
+  async getLoomState() {
+    return remoteUnavailable();
+  },
+  async saveLoomState() {
+    return remoteUnavailable();
+  },
+  async saveWeave() {
+    return remoteUnavailable();
+  },
+  async listWeaves() {
+    return remoteUnavailable();
+  },
+  async saveModuleRun() {
+    return remoteUnavailable();
+  },
+  async listModuleRuns() {
+    return remoteUnavailable();
+  },
 };
 
 export const dataAdapter: DataAdapter = localAdapter;

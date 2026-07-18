@@ -1,4 +1,4 @@
-﻿import type { LoomModule } from "@/lib/data/types";
+﻿import type { LoomModule } from "@/lib/loom/types";
 
 /**
  * Static registry of Loom modules. Data only â€” no behavior.
@@ -11,8 +11,18 @@ export const LOOM_MODULES: LoomModule[] = [
     blurb: "Compress a scattered field into the load-bearing thread.",
     status: "ready",
     inputs: [
-      { id: "field", label: "The field", kind: "longtext", placeholder: "Everything on your mind about this project." },
-      { id: "constraint", label: "One constraint", kind: "text", placeholder: "Time, audience, mediumâ€¦" },
+      {
+        id: "field",
+        label: "The field",
+        kind: "longtext",
+        placeholder: "Everything on your mind about this project.",
+      },
+      {
+        id: "constraint",
+        label: "One constraint",
+        kind: "text",
+        placeholder: "Time, audience, mediumâ€¦",
+      },
     ],
   },
   {
@@ -22,7 +32,12 @@ export const LOOM_MODULES: LoomModule[] = [
     status: "ready",
     inputs: [
       { id: "draft", label: "Draft", kind: "longtext" },
-      { id: "intent", label: "Intent", kind: "text", placeholder: "What should the reader leave with?" },
+      {
+        id: "intent",
+        label: "Intent",
+        kind: "text",
+        placeholder: "What should the reader leave with?",
+      },
     ],
   },
   {
@@ -32,7 +47,12 @@ export const LOOM_MODULES: LoomModule[] = [
     status: "ready",
     inputs: [
       { id: "topic", label: "Topic", kind: "text" },
-      { id: "voices", label: "Voices", kind: "tags", placeholder: "curator, skeptic, apprenticeâ€¦" },
+      {
+        id: "voices",
+        label: "Voices",
+        kind: "tags",
+        placeholder: "curator, skeptic, apprenticeâ€¦",
+      },
     ],
   },
   {
@@ -42,7 +62,12 @@ export const LOOM_MODULES: LoomModule[] = [
     status: "ready",
     inputs: [
       { id: "project", label: "Project", kind: "text" },
-      { id: "channels", label: "Channels", kind: "tags", placeholder: "site, newsletter, socialâ€¦" },
+      {
+        id: "channels",
+        label: "Channels",
+        kind: "tags",
+        placeholder: "site, newsletter, socialâ€¦",
+      },
     ],
   },
   {
@@ -58,7 +83,12 @@ export const LOOM_MODULES: LoomModule[] = [
         kind: "select",
         options: ["newsletter", "x/thread", "linkedin", "instagram", "site", "talk"],
       },
-      { id: "constraint", label: "Constraint", kind: "text", placeholder: "Length, tone, or audience note." },
+      {
+        id: "constraint",
+        label: "Constraint",
+        kind: "text",
+        placeholder: "Length, tone, or audience note.",
+      },
     ],
   },
   {
@@ -68,7 +98,12 @@ export const LOOM_MODULES: LoomModule[] = [
     status: "ready",
     inputs: [
       { id: "field", label: "The field", kind: "longtext", placeholder: "What you're working on." },
-      { id: "adjacencies", label: "Adjacent domains", kind: "tags", placeholder: "cartography, jazz, mycologyâ€¦" },
+      {
+        id: "adjacencies",
+        label: "Adjacent domains",
+        kind: "tags",
+        placeholder: "cartography, jazz, mycologyâ€¦",
+      },
     ],
   },
   {
@@ -77,8 +112,18 @@ export const LOOM_MODULES: LoomModule[] = [
     blurb: "Turn a scattered week of creative activity into the next three concrete moves.",
     status: "ready",
     inputs: [
-      { id: "log", label: "Recent log", kind: "longtext", placeholder: "Recent work, notes, half-finished threads." },
-      { id: "horizon", label: "Horizon", kind: "select", options: ["this week", "this month", "this quarter"] },
+      {
+        id: "log",
+        label: "Recent log",
+        kind: "longtext",
+        placeholder: "Recent work, notes, half-finished threads.",
+      },
+      {
+        id: "horizon",
+        label: "Horizon",
+        kind: "select",
+        options: ["this week", "this month", "this quarter"],
+      },
       { id: "energy", label: "Energy", kind: "select", options: ["low", "steady", "high"] },
     ],
   },

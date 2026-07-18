@@ -64,7 +64,10 @@ function ReflectPage() {
             {value ? "Recording…" : "Choose what most rings true"}
           </span>
           {answeredCount >= PROMPTS.length ? (
-            <Link to="/spark/currents" className="text-thread hover:text-foreground transition-calm">
+            <Link
+              to="/spark/currents"
+              className="text-thread hover:text-foreground transition-calm"
+            >
               Continue →
             </Link>
           ) : (

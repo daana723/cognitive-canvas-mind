@@ -21,14 +21,16 @@ export function PhaseRibbon({ current, onSelect }: Props) {
               onClick={() => onSelect(p.id)}
               className="rounded-xl px-3 py-3 text-left transition-calm"
               style={{
-                background: active
-                  ? "var(--gradient-thread)"
-                  : "oklch(0.22 0.05 278 / 0.5)",
+                background: active ? "var(--gradient-thread)" : "oklch(0.22 0.05 278 / 0.5)",
                 color: active ? "oklch(0.14 0.04 270)" : undefined,
               }}
             >
               <div className="text-sm font-medium">{p.label}</div>
-              <div className={"mt-0.5 text-[11px] " + (active ? "opacity-80" : "text-muted-foreground")}>
+              <div
+                className={
+                  "mt-0.5 text-[11px] " + (active ? "opacity-80" : "text-muted-foreground")
+                }
+              >
                 {p.essence}
               </div>
             </button>

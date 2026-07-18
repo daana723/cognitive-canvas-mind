@@ -1,6 +1,7 @@
 # Project Memory
 
 ## Core
+
 Product is a Creative Studio — a workflow & creative-cognition tool for nonlinear thinkers, founders, ND-friendly creators. NOT an assessment, NOT psychological, NOT diagnostic.
 Everything is user-selected. Never infer, analyze, score, or interpret the user.
 Forbidden vocab: assessment, score, dimension, profile, trait, symptom, diagnosis, Dąbrowski, overexcitabilities, OE, 2E, intensities, developmental level, mental health, wellness.

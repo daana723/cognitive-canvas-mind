@@ -29,7 +29,8 @@ export const MODES: CreativeMode[] = [
     label: "Flux Mode",
     tagline: "Branching ideas, rapid exploration.",
     essence: "A wide, fast aperture. Everything is a possible direction; nothing is committed yet.",
-    invitation: "Open many doors at once. Let the ideas multiply before you ask any of them to behave.",
+    invitation:
+      "Open many doors at once. Let the ideas multiply before you ask any of them to behave.",
     image: flux,
     accent: "oklch(0.82 0.16 215)",
     prompts: [
@@ -43,7 +44,8 @@ export const MODES: CreativeMode[] = [
     label: "Depth Mode",
     tagline: "Introspection, pattern-weaving.",
     essence: "Slower current. You are not looking at the work — you are looking into it.",
-    invitation: "Sit with one thread. Notice what it touches. Let connections surface without forcing them.",
+    invitation:
+      "Sit with one thread. Notice what it touches. Let connections surface without forcing them.",
     image: depth,
     accent: "oklch(0.68 0.18 290)",
     prompts: [
@@ -57,7 +59,8 @@ export const MODES: CreativeMode[] = [
     label: "Signal Mode",
     tagline: "Clarity, structure, systems.",
     essence: "The current narrows. You are sorting, sequencing, naming, and finishing.",
-    invitation: "Pick the load-bearing thread. Build the scaffold around it. Cut what doesn't carry weight.",
+    invitation:
+      "Pick the load-bearing thread. Build the scaffold around it. Cut what doesn't carry weight.",
     image: signal,
     accent: "oklch(0.86 0.14 195)",
     prompts: [
@@ -71,7 +74,8 @@ export const MODES: CreativeMode[] = [
     label: "Myth Mode",
     tagline: "Symbolism, narrative, archetypes.",
     essence: "Working in metaphor and image. The literal version isn't ready yet — the story is.",
-    invitation: "Tell it as a fable, a map, a creature, a season. Use the symbolic surface to find the real one.",
+    invitation:
+      "Tell it as a fable, a map, a creature, a season. Use the symbolic surface to find the real one.",
     image: myth,
     accent: "oklch(0.74 0.22 325)",
     prompts: [
@@ -84,7 +88,8 @@ export const MODES: CreativeMode[] = [
     id: "pulse",
     label: "Pulse Mode",
     tagline: "Momentum, execution, iteration.",
-    essence: "Short cycles. Shipping rough things on purpose to learn what the next rough thing should be.",
+    essence:
+      "Short cycles. Shipping rough things on purpose to learn what the next rough thing should be.",
     invitation: "Set a small loop. Make. Show. Adjust. Repeat the loop before you redesign it.",
     image: pulse,
     accent: "oklch(0.78 0.16 40)",

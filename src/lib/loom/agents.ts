@@ -3,13 +3,7 @@
 export type SigilVariant = "loom" | "node" | "spiral" | "eye" | "weave" | "vessel" | "crown";
 
 export type LoomAgentId =
-  | "loom"
-  | "research"
-  | "content"
-  | "product"
-  | "marketing"
-  | "avatar"
-  | "operations";
+  "loom" | "research" | "content" | "product" | "marketing" | "avatar" | "operations";
 
 export interface LoomAgent {
   id: LoomAgentId;
@@ -28,7 +22,8 @@ export const LOOM_AGENTS: LoomAgent[] = [
     label: "The Loom",
     role: "Orchestrator",
     sigil: "loom",
-    essence: "Receives the intention, holds the thread, and decides which parts of the constellation should light up first.",
+    essence:
+      "Receives the intention, holds the thread, and decides which parts of the constellation should light up first.",
     accent: "oklch(0.84 0.16 215)",
     moduleIds: [],
     capabilities: ["read the thread", "sequence the work", "return a clear next path"],
@@ -38,7 +33,8 @@ export const LOOM_AGENTS: LoomAgent[] = [
     label: "Research",
     role: "Pattern scout",
     sigil: "eye",
-    essence: "Surfaces the field, the hidden tension, and the non-obvious bridge inside scattered material.",
+    essence:
+      "Surfaces the field, the hidden tension, and the non-obvious bridge inside scattered material.",
     accent: "oklch(0.78 0.15 225)",
     moduleIds: ["signal-collapse", "serendipity-lab"],
     capabilities: ["collapse signal", "cross-pollinate ideas", "name useful patterns"],
@@ -78,17 +74,23 @@ export const LOOM_AGENTS: LoomAgent[] = [
     label: "Avatar",
     role: "Coherent presence",
     sigil: "crown",
-    essence: "Holds faceless or semi-faceless presence with recognizable voice, boundaries, and rhythm.",
+    essence:
+      "Holds faceless or semi-faceless presence with recognizable voice, boundaries, and rhythm.",
     accent: "oklch(0.82 0.14 320)",
     moduleIds: [],
-    capabilities: ["link to SPARK reflection", "hold voice coherence", "protect creative boundaries"],
+    capabilities: [
+      "link to SPARK reflection",
+      "hold voice coherence",
+      "protect creative boundaries",
+    ],
   },
   {
     id: "operations",
     label: "Operations",
     role: "Quiet machinery",
     sigil: "node",
-    essence: "Tends the next moves, energy fit, stop rules, and the practical underneath of creative work.",
+    essence:
+      "Tends the next moves, energy fit, stop rules, and the practical underneath of creative work.",
     accent: "oklch(0.74 0.1 250)",
     moduleIds: ["creative-operator"],
     capabilities: ["choose next moves", "reduce load", "make the week workable"],
@@ -98,4 +100,6 @@ export const LOOM_AGENTS: LoomAgent[] = [
 export const getLoomAgent = (id: string) => LOOM_AGENTS.find((agent) => agent.id === id);
 
 export const modulesForAgent = (agent: LoomAgent) =>
-  agent.moduleIds.map((moduleId) => LOOM_MODULES.find((module) => module.id === moduleId)).filter(Boolean);
+  agent.moduleIds
+    .map((moduleId) => LOOM_MODULES.find((module) => module.id === moduleId))
+    .filter(Boolean);

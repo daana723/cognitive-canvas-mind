@@ -78,10 +78,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Creative Studio — A workflow tool for nonlinear thinkers" },
-      { name: "description", content: "A creative cognition and workflow-navigation tool for nonlinear thinkers, founders, and ND-friendly creators. Choose your mode. Map your work." },
+      {
+        name: "description",
+        content:
+          "A creative cognition and workflow-navigation tool for nonlinear thinkers, founders, and ND-friendly creators. Choose your mode. Map your work.",
+      },
       { name: "author", content: "Creative Studio" },
       { property: "og:title", content: "Creative Studio" },
-      { property: "og:description", content: "Choose your creative mode. Map your work. A studio, not an assessment." },
+      {
+        property: "og:description",
+        content: "Choose your creative mode. Map your work. A studio, not an assessment.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },

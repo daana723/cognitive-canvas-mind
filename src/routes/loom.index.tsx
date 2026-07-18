@@ -6,7 +6,7 @@ import dataAdapter from "@/lib/data/adapter";
 import { LOOM_AGENTS, getLoomAgent } from "@/lib/loom/agents";
 import { getLoomModule } from "@/lib/loom/modules";
 import type { LoomRunResponse } from "@/lib/data/types";
-import type { WeavePlan } from "@/lib/loom/orchestrator";
+import type { WeavePlan } from "@/lib/loom/types";
 
 export const Route = createFileRoute("/loom/")({
   component: LoomEntryPage,
@@ -28,7 +28,9 @@ const defaultInputsFor = (moduleId: string, intention: string): Record<string, u
 };
 
 function LoomEntryPage() {
-  const [body, setBody] = useState("I have scattered ideas for a creative offer, but I need the signal, voice, launch shape, and next moves.");
+  const [body, setBody] = useState(
+    "I have scattered ideas for a creative offer, but I need the signal, voice, launch shape, and next moves.",
+  );
   const [tags, setTags] = useState<string[]>(["clarity", "content", "launch"]);
   const [plan, setPlan] = useState<WeavePlan | null>(null);
   const [runs, setRuns] = useState<LoomRunResponse[]>([]);
@@ -37,7 +39,9 @@ function LoomEntryPage() {
   const litAgents = useMemo(() => new Set(plan?.agents ?? []), [plan]);
 
   const toggleTag = (tag: string) => {
-    setTags((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]);
+    setTags((current) =>
+      current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag],
+    );
   };
 
   const createWeave = async () => {
@@ -84,16 +88,31 @@ function LoomEntryPage() {
     <section className="relative z-10 mx-auto max-w-6xl px-6 pt-8">
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
         <div>
-          <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground fade-up">The weaving</p>
-          <h1 className="mt-4 font-display text-5xl leading-[1.05] sm:text-6xl fade-up" style={{ animationDelay: "80ms" }}>
+          <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground fade-up">
+            The weaving
+          </p>
+          <h1
+            className="mt-4 font-display text-5xl leading-[1.05] sm:text-6xl fade-up"
+            style={{ animationDelay: "80ms" }}
+          >
             Bring a messy <span className="text-thread italic">creative intention</span>.
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground fade-up" style={{ animationDelay: "160ms" }}>
-            The Loom holds the thread, lights the right agents, and returns a structured action plan. Local-first, deterministic, and calm on purpose.
+          <p
+            className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground fade-up"
+            style={{ animationDelay: "160ms" }}
+          >
+            The Loom holds the thread, lights the right agents, and returns a structured action
+            plan. Local-first, deterministic, and calm on purpose.
           </p>
 
-          <div className="mt-8 glass-panel rounded-2xl p-5 fade-up" style={{ animationDelay: "240ms" }}>
-            <label className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground" htmlFor="loom-intention">
+          <div
+            className="mt-8 glass-panel rounded-2xl p-5 fade-up"
+            style={{ animationDelay: "240ms" }}
+          >
+            <label
+              className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground"
+              htmlFor="loom-intention"
+            >
               Intention
             </label>
             <textarea
@@ -112,7 +131,11 @@ function LoomEntryPage() {
                     type="button"
                     onClick={() => toggleTag(tag)}
                     className="rounded-full px-3 py-2 text-[10px] tracking-[0.2em] uppercase transition-calm"
-                    style={active ? { background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)" } : { border: "1px solid oklch(0.55 0.05 280 / 0.4)" }}
+                    style={
+                      active
+                        ? { background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)" }
+                        : { border: "1px solid oklch(0.55 0.05 280 / 0.4)" }
+                    }
                   >
                     {tag}
                   </button>
@@ -132,14 +155,28 @@ function LoomEntryPage() {
 
         <div className="glass-panel rounded-2xl p-5 fade-up" style={{ animationDelay: "320ms" }}>
           <div className="mb-4 flex items-center justify-between gap-4">
-            <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">Constellation</p>
-            <Link to="/loom/constellation" className="text-[10px] tracking-[0.22em] uppercase text-thread">Open grid</Link>
+            <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">
+              Constellation
+            </p>
+            <Link
+              to="/loom/constellation"
+              className="text-[10px] tracking-[0.22em] uppercase text-thread"
+            >
+              Open grid
+            </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {LOOM_AGENTS.map((agent) => {
               const lit = litAgents.has(agent.id);
               return (
-                <div key={agent.id} className="rounded-xl border p-3 transition-calm" style={{ borderColor: lit ? agent.accent : "oklch(1 0 0 / 0.1)", color: lit ? agent.accent : undefined }}>
+                <div
+                  key={agent.id}
+                  className="rounded-xl border p-3 transition-calm"
+                  style={{
+                    borderColor: lit ? agent.accent : "oklch(1 0 0 / 0.1)",
+                    color: lit ? agent.accent : undefined,
+                  }}
+                >
                   <Sigil variant={agent.sigil} className="h-10 w-10" />
                   <p className="mt-2 font-display text-lg text-foreground">{agent.label}</p>
                   <p className="text-xs text-muted-foreground">{agent.role}</p>
@@ -153,7 +190,9 @@ function LoomEntryPage() {
       {plan && (
         <section className="mt-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="glass-panel rounded-2xl p-5">
-            <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">Weave plan</p>
+            <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">
+              Weave plan
+            </p>
             <h2 className="mt-3 font-display text-3xl">{plan.summary}</h2>
             <div className="mt-5 space-y-3">
               {plan.phases.map((phase) => (
@@ -167,7 +206,9 @@ function LoomEntryPage() {
 
           <div className="glass-panel rounded-2xl p-5">
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">Lit sequence</p>
+              <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">
+                Lit sequence
+              </p>
               <button
                 type="button"
                 onClick={returnActionPlan}
@@ -182,11 +223,18 @@ function LoomEntryPage() {
               {plan.steps.map((step, index) => {
                 const agent = getLoomAgent(step.agentId);
                 return (
-                  <Link key={step.id} to="/loom/$moduleId" params={{ moduleId: step.moduleId }} className="block rounded-xl border border-border/50 p-4 transition-calm hover:-translate-y-0.5 hover:border-primary/50">
+                  <Link
+                    key={step.id}
+                    to="/loom/$moduleId"
+                    params={{ moduleId: step.moduleId }}
+                    className="block rounded-xl border border-border/50 p-4 transition-calm hover:-translate-y-0.5 hover:border-primary/50"
+                  >
                     <div className="flex items-start gap-3">
                       {agent && <Sigil variant={agent.sigil} className="mt-1 h-8 w-8" />}
                       <div>
-                        <p className="text-[10px] tracking-[0.22em] uppercase text-muted-foreground">Step {index + 1} - {step.agentLabel}</p>
+                        <p className="text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
+                          Step {index + 1} - {step.agentLabel}
+                        </p>
                         <h3 className="font-display text-2xl">{step.moduleLabel}</h3>
                         <p className="mt-1 text-sm text-muted-foreground">{step.why}</p>
                       </div>
@@ -201,7 +249,9 @@ function LoomEntryPage() {
 
       {runs.length > 0 && (
         <section className="mt-8 space-y-4">
-          <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">Returned action plan</p>
+          <p className="text-[10px] tracking-[0.26em] uppercase text-muted-foreground">
+            Returned action plan
+          </p>
           {runs.map((run) => (
             <article key={run.runId} className="glass-panel rounded-2xl p-5">
               <h3 className="font-display text-3xl">{run.label}</h3>
@@ -210,7 +260,9 @@ function LoomEntryPage() {
                 {Object.entries(run.outputs).map(([key, value]) => (
                   <div key={key} className="rounded-xl border border-border/50 p-3">
                     <p className="text-[10px] tracking-[0.2em] uppercase text-thread">{key}</p>
-                    <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">{Array.isArray(value) ? value.join("\n") : String(value)}</p>
+                    <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">
+                      {Array.isArray(value) ? value.join("\n") : String(value)}
+                    </p>
                   </div>
                 ))}
               </div>

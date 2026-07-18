@@ -6,9 +6,17 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Nonlinear Studio â€” a creative cognitive layer" },
-      { name: "description", content: "A creative cognitive layer for nonlinear thinkers. Two doors: SPARK, a reflective mirror; Loom, a practical workspace. Local-first. Non-diagnostic." },
+      {
+        name: "description",
+        content:
+          "A creative cognitive layer for nonlinear thinkers. Two doors: SPARK, a reflective mirror; Loom, a practical workspace. Local-first. Non-diagnostic.",
+      },
       { property: "og:title", content: "Nonlinear Studio" },
-      { property: "og:description", content: "SPARK reflection Â· Loom workspace. A studio for nonlinear thinkers, not a verdict about them." },
+      {
+        property: "og:description",
+        content:
+          "SPARK reflection Â· Loom workspace. A studio for nonlinear thinkers, not a verdict about them.",
+      },
     ],
   }),
   component: Landing,
@@ -21,7 +29,10 @@ function Landing() {
 
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-8">
         <Link to="/" className="flex items-center gap-3 group">
-          <span className="h-2.5 w-2.5 rounded-full breathe" style={{ background: "var(--gradient-thread)" }} />
+          <span
+            className="h-2.5 w-2.5 rounded-full breathe"
+            style={{ background: "var(--gradient-thread)" }}
+          />
           <span className="font-display text-lg tracking-wide">Nonlinear Studio</span>
         </Link>
         <nav className="hidden gap-7 sm:flex">
@@ -34,7 +45,11 @@ function Landing() {
             { to: "/reflections", label: "Reflections" },
             { to: "/snapshots", label: "Snapshots" },
           ].map((l) => (
-            <Link key={l.to} to={l.to} className="text-[11px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm">
+            <Link
+              key={l.to}
+              to={l.to}
+              className="text-[11px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm"
+            >
               {l.label}
             </Link>
           ))}
@@ -47,18 +62,27 @@ function Landing() {
           a creative cognitive layer
           <span className="h-px w-8 bg-border" />
         </p>
-        <h1 className="font-display text-5xl sm:text-7xl leading-[1.05] fade-up" style={{ animationDelay: "60ms" }}>
+        <h1
+          className="font-display text-5xl sm:text-7xl leading-[1.05] fade-up"
+          style={{ animationDelay: "60ms" }}
+        >
           A studio for
           <br />
           <span className="text-thread italic">nonlinear thinkers.</span>
         </h1>
-        <p className="mx-auto mt-8 max-w-2xl text-lg sm:text-xl leading-relaxed text-muted-foreground fade-up" style={{ animationDelay: "180ms" }}>
-          Two equal doors. SPARK is a reflective mirror â€” a deep, guided
-          reflection for recognizing patterns in how you create, sense, decide,
-          and move through ideas. Loom is a practical workspace â€” for turning
-          scattered ideas into finished outputs. Nothing is inferred about you.
+        <p
+          className="mx-auto mt-8 max-w-2xl text-lg sm:text-xl leading-relaxed text-muted-foreground fade-up"
+          style={{ animationDelay: "180ms" }}
+        >
+          Two equal doors. SPARK is a reflective mirror â€” a deep, guided reflection for
+          recognizing patterns in how you create, sense, decide, and move through ideas. Loom is a
+          practical workspace â€” for turning scattered ideas into finished outputs. Nothing is
+          inferred about you.
         </p>
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 fade-up" style={{ animationDelay: "280ms" }}>
+        <div
+          className="mt-14 grid gap-6 sm:grid-cols-2 fade-up"
+          style={{ animationDelay: "280ms" }}
+        >
           <Link
             to="/spark"
             className="glass-panel group relative rounded-3xl p-8 text-left transition-calm hover:-translate-y-1"
@@ -70,8 +94,8 @@ function Landing() {
               Take the <span className="text-thread italic">SPARK</span> reflection
             </h2>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              A guided reflective mirror. Recognize patterns in how you create,
-              sense, decide, and move through ideas. Deep, careful, non-diagnostic.
+              A guided reflective mirror. Recognize patterns in how you create, sense, decide, and
+              move through ideas. Deep, careful, non-diagnostic.
             </p>
             <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
               Enter the reflection â†’
@@ -88,7 +112,8 @@ function Landing() {
               Open the <span className="text-thread italic">Loom</span> workspace
             </h2>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              The weaving layer: one orchestrator and a constellation of agents that turn scattered intention into structured creative action.
+              The weaving layer: one orchestrator and a constellation of agents that turn scattered
+              intention into structured creative action.
             </p>
             <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
               Open the Loom â†’
@@ -106,12 +131,13 @@ function Landing() {
             <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground mb-3">
               Five creative currents
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl">Modes you choose â€” never modes assigned.</h2>
+            <h2 className="font-display text-3xl sm:text-4xl">
+              Modes you choose â€” never modes assigned.
+            </h2>
           </div>
           <p className="hidden max-w-sm text-sm text-muted-foreground sm:block">
-            The studio organizes ideas, projects, and creative states. It does not
-            categorize you. Each mode is a symbolic current â€” pick whichever fits
-            this moment.
+            The studio organizes ideas, projects, and creative states. It does not categorize you.
+            Each mode is a symbolic current â€” pick whichever fits this moment.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -123,11 +149,24 @@ function Landing() {
               style={{ animationDelay: `${i * 50}ms` }}
             >
               <div className="relative h-36 w-full overflow-hidden">
-                <img src={m.image} alt="" className="h-full w-full object-cover transition-calm group-hover:scale-105" />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 30%, oklch(0.14 0.05 275 / 0.95) 100%)" }} />
+                <img
+                  src={m.image}
+                  alt=""
+                  className="h-full w-full object-cover transition-calm group-hover:scale-105"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent 30%, oklch(0.14 0.05 275 / 0.95) 100%)",
+                  }}
+                />
               </div>
               <div className="p-4">
-                <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase" style={{ color: m.accent }}>
+                <div
+                  className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase"
+                  style={{ color: m.accent }}
+                >
                   <span className="h-1.5 w-1.5 rounded-full" style={{ background: m.accent }} />
                   Mode
                 </div>
@@ -149,8 +188,8 @@ function Landing() {
           <span className="text-muted-foreground">â†’</span> Notice.
         </p>
         <p className="mt-6 text-base text-muted-foreground leading-relaxed">
-          Replace certainty with exploration. Replace labels with narratives.
-          Replace prescriptions with experiments. A reflective guide, not an assessment tool.
+          Replace certainty with exploration. Replace labels with narratives. Replace prescriptions
+          with experiments. A reflective guide, not an assessment tool.
         </p>
       </section>
 
@@ -160,6 +199,3 @@ function Landing() {
     </main>
   );
 }
-
-
-

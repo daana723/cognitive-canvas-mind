@@ -51,7 +51,9 @@ export function SnapshotList() {
               className="mt-1 w-full rounded-xl border border-border/60 bg-black/20 px-3 py-2.5 text-sm outline-none focus:border-foreground/40"
             >
               {MODES.map((m) => (
-                <option key={m.id} value={m.id}>{m.label}</option>
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
               ))}
             </select>
           </label>
@@ -64,7 +66,9 @@ export function SnapshotList() {
             >
               <option value="">—</option>
               {PHASES.map((p) => (
-                <option key={p.id} value={p.id}>{p.label}</option>
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
               ))}
             </select>
           </label>

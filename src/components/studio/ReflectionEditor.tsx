@@ -5,7 +5,9 @@ export function ReflectionEditor() {
   const [items, setItems] = useState<Reflection[]>([]);
   const [draft, setDraft] = useState("");
 
-  useEffect(() => { setItems(studioStore.load().reflections); }, []);
+  useEffect(() => {
+    setItems(studioStore.load().reflections);
+  }, []);
 
   const add = () => {
     const body = draft.trim();
@@ -64,7 +66,9 @@ export function ReflectionEditor() {
                   Release
                 </button>
               </div>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{r.body}</p>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+                {r.body}
+              </p>
             </div>
           ))}
         </div>

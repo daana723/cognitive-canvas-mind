@@ -9,18 +9,24 @@ Extend `src/lib/loom/modules.ts` so all 8 modules Codex will wire are visible in
 All three follow the existing shape (`id`, `label`, `blurb`, `status: "stub"`, `inputs[]`) and reuse the existing `LoomModuleInput` kinds (`text`, `longtext`, `select`, `tags`).
 
 ### 1. Platform Adapter
+
 Reshape one piece of source material for a specific platform without losing its spine.
+
 - `source` (longtext) — the original piece
 - `platform` (select) — newsletter, x/thread, linkedin, instagram, site, talk
 - `constraint` (text, optional) — length, tone, or audience note
 
 ### 2. Serendipity Lab
+
 Cross-pollinate the current field with an unexpected adjacent domain to find non-obvious moves.
+
 - `field` (longtext) — what you're working on
 - `adjacencies` (tags) — domains to borrow from (e.g. cartography, jazz, mycology)
 
 ### 3. Creative Operator
+
 Turn a scattered week of creative activity into the next three concrete moves.
+
 - `log` (longtext) — recent work, notes, half-finished threads
 - `horizon` (select) — this week, this month, this quarter
 - `energy` (select) — low, steady, high

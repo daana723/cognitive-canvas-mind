@@ -14,7 +14,10 @@ export function CurrentCard({ prompt, value, onChange }: Props) {
   return (
     <article className="glass-panel relative rounded-3xl px-6 py-10 sm:px-12 sm:py-14 fade-up">
       <div className="mb-8 flex items-center gap-3">
-        <span className="h-2 w-2 rounded-full breathe" style={{ background: "var(--gradient-thread)" }} />
+        <span
+          className="h-2 w-2 rounded-full breathe"
+          style={{ background: "var(--gradient-thread)" }}
+        />
         <span className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">
           The {c.label} current
         </span>

@@ -11,7 +11,10 @@ export const Route = createFileRoute("/spark/currents")({
   head: () => ({
     meta: [
       { title: "The five currents — SPARK" },
-      { name: "description", content: "An optional second reading: where the five currents run warm." },
+      {
+        name: "description",
+        content: "An optional second reading: where the five currents run warm.",
+      },
     ],
   }),
   component: CurrentsPage,
@@ -64,16 +67,19 @@ function CurrentsPage() {
             <span className="text-thread italic">run warm right now.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-base text-muted-foreground leading-relaxed">
-            A shorter second reading. Flux, Depth, Signal, Myth, Pulse — the
-            five currents that run through creative life. This step is
-            optional. You can skip straight to the mirror; it will surface
-            what your first reflection already carries.
+            A shorter second reading. Flux, Depth, Signal, Myth, Pulse — the five currents that run
+            through creative life. This step is optional. You can skip straight to the mirror; it
+            will surface what your first reflection already carries.
           </p>
           <div className="mt-10 flex flex-col items-center gap-3">
             <button
               onClick={() => setPhase("in_progress")}
               className="inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm tracking-[0.18em] uppercase transition-calm"
-              style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)", boxShadow: "var(--shadow-glow)" }}
+              style={{
+                background: "var(--gradient-thread)",
+                color: "oklch(0.14 0.04 270)",
+                boxShadow: "var(--shadow-glow)",
+              }}
             >
               Continue with currents →
             </button>
@@ -102,7 +108,10 @@ function CurrentsPage() {
           >
             ← Back
           </button>
-          <Link to="/spark/mirror" className="text-muted-foreground hover:text-foreground transition-calm">
+          <Link
+            to="/spark/mirror"
+            className="text-muted-foreground hover:text-foreground transition-calm"
+          >
             Skip to the mirror →
           </Link>
         </div>

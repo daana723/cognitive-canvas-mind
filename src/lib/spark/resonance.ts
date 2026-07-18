@@ -11,8 +11,13 @@ export type FacetLean = Record<FacetId, number>; // 0..1 — recognition weight,
  */
 export function leansFrom(responses: Responses): FacetLean {
   const buckets: Record<FacetId, number[]> = {
-    attention: [], rhythm: [], feeling: [], sensing: [],
-    understanding: [], making: [], deciding: [],
+    attention: [],
+    rhythm: [],
+    feeling: [],
+    sensing: [],
+    understanding: [],
+    making: [],
+    deciding: [],
   };
   for (const p of PROMPTS) {
     const raw = responses[p.id];

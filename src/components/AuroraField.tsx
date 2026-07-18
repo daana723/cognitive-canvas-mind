@@ -27,15 +27,23 @@ export function AuroraField() {
       />
       <div
         className="absolute -top-40 -left-40 h-[65vh] w-[65vh] rounded-full opacity-80 blur-3xl drift"
-        style={{ background: "radial-gradient(circle, oklch(0.78 0.22 290 / 0.65), transparent 65%)" }}
+        style={{
+          background: "radial-gradient(circle, oklch(0.78 0.22 290 / 0.65), transparent 65%)",
+        }}
       />
       <div
         className="absolute top-1/3 -right-40 h-[60vh] w-[60vh] rounded-full opacity-70 blur-3xl drift"
-        style={{ background: "radial-gradient(circle, oklch(0.84 0.18 215 / 0.6), transparent 65%)", animationDelay: "-4s" }}
+        style={{
+          background: "radial-gradient(circle, oklch(0.84 0.18 215 / 0.6), transparent 65%)",
+          animationDelay: "-4s",
+        }}
       />
       <div
         className="absolute -bottom-40 left-1/4 h-[55vh] w-[55vh] rounded-full opacity-60 blur-3xl drift"
-        style={{ background: "radial-gradient(circle, oklch(0.74 0.22 325 / 0.6), transparent 65%)", animationDelay: "-8s" }}
+        style={{
+          background: "radial-gradient(circle, oklch(0.74 0.22 325 / 0.6), transparent 65%)",
+          animationDelay: "-8s",
+        }}
       />
     </div>
   );

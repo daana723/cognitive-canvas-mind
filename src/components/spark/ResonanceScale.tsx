@@ -34,13 +34,17 @@ export function ResonanceScale({ value, onChange }: Props) {
             >
               <span
                 className="h-1.5 w-1.5 rounded-full transition-calm"
-                style={{ background: active ? "oklch(0.16 0.04 275)" : "oklch(0.7 0.06 280 / 0.6)" }}
+                style={{
+                  background: active ? "oklch(0.16 0.04 275)" : "oklch(0.7 0.06 280 / 0.6)",
+                }}
               />
             </span>
             <span
               className={
                 "text-[10px] sm:text-xs tracking-wide transition-calm " +
-                (active ? "text-foreground" : "text-muted-foreground group-hover:text-foreground/80")
+                (active
+                  ? "text-foreground"
+                  : "text-muted-foreground group-hover:text-foreground/80")
               }
             >
               {RESONANCE_LABELS[v]}

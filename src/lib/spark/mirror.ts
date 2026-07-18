@@ -21,7 +21,7 @@ export interface Motif {
 export interface SymbolicModeMatch {
   mode: ModeId;
   label: string;
-  weight: number;   // 0..1 recognition weight, not a score
+  weight: number; // 0..1 recognition weight, not a score
   invitation: string;
 }
 
@@ -116,7 +116,7 @@ function symbolicModeMatches(
 ): SymbolicModeMatch[] {
   // Weight each mode from facet leans; blend with current heat when present.
   const w: Record<ModeId, number> = {
-    flux: (1 - leans.attention) * 0.6 + (leans.making) * 0.4,
+    flux: (1 - leans.attention) * 0.6 + leans.making * 0.4,
     depth: leans.attention * 0.5 + leans.feeling * 0.3 + leans.understanding * 0.2,
     signal: (1 - leans.deciding) * 0.5 + (1 - leans.making) * 0.3 + leans.rhythm * 0.2,
     myth: leans.making * 0.4 + leans.feeling * 0.3 + leans.understanding * 0.3,
@@ -147,15 +147,21 @@ function pickNote(leans: FacetLean, matches: SymbolicModeMatch[]): string {
   const primary = matches[0]?.mode;
   const noteByMode: Record<ModeId, string> = {
     flux: "This reading holds many open doors. Notice which one still feels alive an hour from now, and let that be enough of a signal.",
-    depth: "This reading sits with depth. Consider giving one thread more time before asking it to become useful.",
-    signal: "This reading leans toward structure. Notice whether any of the beats you'd cut are actually the ones carrying the work.",
+    depth:
+      "This reading sits with depth. Consider giving one thread more time before asking it to become useful.",
+    signal:
+      "This reading leans toward structure. Notice whether any of the beats you'd cut are actually the ones carrying the work.",
     myth: "This reading arrives through image. Consider letting the symbol lead one small literal step, rather than the other way around.",
-    pulse: "This reading moves in loops. Consider stopping after the next small loop to notice what it taught, before starting another.",
+    pulse:
+      "This reading moves in loops. Consider stopping after the next small loop to notice what it taught, before starting another.",
   };
-  const base = primary ? noteByMode[primary] : "Notice which of these motifs still resonates a week from now.";
-  const feeling = leans.feeling >= 0.65
-    ? " If feeling arrives at high volume, let the wave move through before deciding what it means."
-    : "";
+  const base = primary
+    ? noteByMode[primary]
+    : "Notice which of these motifs still resonates a week from now.";
+  const feeling =
+    leans.feeling >= 0.65
+      ? " If feeling arrives at high volume, let the wave move through before deciding what it means."
+      : "";
   return base + feeling;
 }
 
