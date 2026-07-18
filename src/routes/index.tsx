@@ -27,6 +27,7 @@ function Landing() {
         <nav className="hidden gap-7 sm:flex">
           {[
             { to: "/spark", label: "SPARK" },
+            { to: "/twoe", label: "2E" },
             { to: "/modes", label: "Modes" },
             { to: "/map", label: "Map" },
             { to: "/workflows", label: "Workflows" },
@@ -92,6 +93,28 @@ function Landing() {
             </p>
             <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
               Open the workspace →
+            </p>
+          </Link>
+        </div>
+        <div className="mt-6 grid gap-6 fade-up" style={{ animationDelay: "360ms" }}>
+          <Link
+            to="/twoe"
+            className="glass-panel group relative rounded-3xl p-8 text-left transition-calm hover:-translate-y-1"
+          >
+            <p className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground">
+              The framework door
+            </p>
+            <h2 className="mt-3 font-display text-3xl">
+              Map your <span className="text-thread italic">2E overexcitabilities</span>
+            </h2>
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">
+              A 40-prompt self-recognition assessment built on Dabrowski's five
+              Overexcitabilities — intellectual, emotional, imaginational, psychomotor,
+              sensual. Radar profile, dominant channel, and strengths / shadow readings.
+              Non-diagnostic, local-first.
+            </p>
+            <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
+              Begin the assessment →
             </p>
           </Link>
         </div>

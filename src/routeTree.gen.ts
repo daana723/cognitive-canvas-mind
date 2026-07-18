@@ -20,6 +20,7 @@ import { Route as MapRouteImport } from './routes/map'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TwoeIndexRouteImport } from './routes/twoe.index'
 import { Route as SparkIndexRouteImport } from './routes/spark.index'
+import { Route as TwoeResultsRouteImport } from './routes/twoe.results'
 import { Route as TwoeAssessmentRouteImport } from './routes/twoe.assessment'
 import { Route as SparkReflectRouteImport } from './routes/spark.reflect'
 import { Route as SparkMirrorRouteImport } from './routes/spark.mirror'
@@ -80,6 +81,11 @@ const SparkIndexRoute = SparkIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SparkRoute,
 } as any)
+const TwoeResultsRoute = TwoeResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => TwoeRoute,
+} as any)
 const TwoeAssessmentRoute = TwoeAssessmentRouteImport.update({
   id: '/assessment',
   path: '/assessment',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
   '/twoe/assessment': typeof TwoeAssessmentRoute
+  '/twoe/results': typeof TwoeResultsRoute
   '/spark/': typeof SparkIndexRoute
   '/twoe/': typeof TwoeIndexRoute
 }
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
   '/twoe/assessment': typeof TwoeAssessmentRoute
+  '/twoe/results': typeof TwoeResultsRoute
   '/spark': typeof SparkIndexRoute
   '/twoe': typeof TwoeIndexRoute
 }
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
   '/twoe/assessment': typeof TwoeAssessmentRoute
+  '/twoe/results': typeof TwoeResultsRoute
   '/spark/': typeof SparkIndexRoute
   '/twoe/': typeof TwoeIndexRoute
 }
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/spark/mirror'
     | '/spark/reflect'
     | '/twoe/assessment'
+    | '/twoe/results'
     | '/spark/'
     | '/twoe/'
   fileRoutesByTo: FileRoutesByTo
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/spark/mirror'
     | '/spark/reflect'
     | '/twoe/assessment'
+    | '/twoe/results'
     | '/spark'
     | '/twoe'
   id:
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/spark/mirror'
     | '/spark/reflect'
     | '/twoe/assessment'
+    | '/twoe/results'
     | '/spark/'
     | '/twoe/'
   fileRoutesById: FileRoutesById
@@ -294,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparkIndexRouteImport
       parentRoute: typeof SparkRoute
     }
+    '/twoe/results': {
+      id: '/twoe/results'
+      path: '/results'
+      fullPath: '/twoe/results'
+      preLoaderRoute: typeof TwoeResultsRouteImport
+      parentRoute: typeof TwoeRoute
+    }
     '/twoe/assessment': {
       id: '/twoe/assessment'
       path: '/assessment'
@@ -343,11 +362,13 @@ const SparkRouteWithChildren = SparkRoute._addFileChildren(SparkRouteChildren)
 
 interface TwoeRouteChildren {
   TwoeAssessmentRoute: typeof TwoeAssessmentRoute
+  TwoeResultsRoute: typeof TwoeResultsRoute
   TwoeIndexRoute: typeof TwoeIndexRoute
 }
 
 const TwoeRouteChildren: TwoeRouteChildren = {
   TwoeAssessmentRoute: TwoeAssessmentRoute,
+  TwoeResultsRoute: TwoeResultsRoute,
   TwoeIndexRoute: TwoeIndexRoute,
 }
 
