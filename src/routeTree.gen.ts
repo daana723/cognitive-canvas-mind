@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkflowsRouteImport } from './routes/workflows'
+import { Route as TwoeRouteImport } from './routes/twoe'
 import { Route as TimingRouteImport } from './routes/timing'
 import { Route as SparkRouteImport } from './routes/spark'
 import { Route as SnapshotsRouteImport } from './routes/snapshots'
@@ -25,6 +26,11 @@ import { Route as SparkCurrentsRouteImport } from './routes/spark.currents'
 const WorkflowsRoute = WorkflowsRouteImport.update({
   id: '/workflows',
   path: '/workflows',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TwoeRoute = TwoeRouteImport.update({
+  id: '/twoe',
+  path: '/twoe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TimingRoute = TimingRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/snapshots': typeof SnapshotsRoute
   '/spark': typeof SparkRouteWithChildren
   '/timing': typeof TimingRoute
+  '/twoe': typeof TwoeRoute
   '/workflows': typeof WorkflowsRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/reflections': typeof ReflectionsRoute
   '/snapshots': typeof SnapshotsRoute
   '/timing': typeof TimingRoute
+  '/twoe': typeof TwoeRoute
   '/workflows': typeof WorkflowsRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/snapshots': typeof SnapshotsRoute
   '/spark': typeof SparkRouteWithChildren
   '/timing': typeof TimingRoute
+  '/twoe': typeof TwoeRoute
   '/workflows': typeof WorkflowsRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/snapshots'
     | '/spark'
     | '/timing'
+    | '/twoe'
     | '/workflows'
     | '/spark/currents'
     | '/spark/mirror'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/reflections'
     | '/snapshots'
     | '/timing'
+    | '/twoe'
     | '/workflows'
     | '/spark/currents'
     | '/spark/mirror'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/snapshots'
     | '/spark'
     | '/timing'
+    | '/twoe'
     | '/workflows'
     | '/spark/currents'
     | '/spark/mirror'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   SnapshotsRoute: typeof SnapshotsRoute
   SparkRoute: typeof SparkRouteWithChildren
   TimingRoute: typeof TimingRoute
+  TwoeRoute: typeof TwoeRoute
   WorkflowsRoute: typeof WorkflowsRoute
 }
 
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/workflows'
       fullPath: '/workflows'
       preLoaderRoute: typeof WorkflowsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/twoe': {
+      id: '/twoe'
+      path: '/twoe'
+      fullPath: '/twoe'
+      preLoaderRoute: typeof TwoeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/timing': {
@@ -293,6 +313,7 @@ const rootRouteChildren: RootRouteChildren = {
   SnapshotsRoute: SnapshotsRoute,
   SparkRoute: SparkRouteWithChildren,
   TimingRoute: TimingRoute,
+  TwoeRoute: TwoeRoute,
   WorkflowsRoute: WorkflowsRoute,
 }
 export const routeTree = rootRouteImport
