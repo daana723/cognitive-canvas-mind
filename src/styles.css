@@ -193,3 +193,12 @@
 @utility fade-up {
   animation: fade-up var(--transition-calm) ease-out both;
 }
+
+@keyframes pulse-thread {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.9; }
+}
+
+@utility pulse-thread {
+  animation: pulse-thread 6s ease-in-out infinite;
+}

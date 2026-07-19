@@ -28,6 +28,7 @@ function Landing() {
           {[
             { to: "/spark", label: "SPARK" },
             { to: "/twoe", label: "2E" },
+            { to: "/loom", label: "Loom" },
             { to: "/modes", label: "Modes" },
             { to: "/map", label: "Map" },
             { to: "/workflows", label: "Workflows" },
@@ -78,7 +79,7 @@ function Landing() {
             </p>
           </Link>
           <Link
-            to="/modes"
+            to="/loom"
             className="glass-panel group relative rounded-3xl p-8 text-left transition-calm hover:-translate-y-1"
           >
             <p className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground">
@@ -88,11 +89,12 @@ function Landing() {
               Open the <span className="text-thread italic">Loom</span> workspace
             </h2>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              A workspace for nonlinear making. Choose a mode, pull scattered
-              ideas onto a map, run a workflow, keep what you notice.
+              Bring a messy creative intention. The Loom reads the thread and
+              lights the right agents — Research, Content, Product, Marketing,
+              Avatar, Operations — and returns a structured plan.
             </p>
             <p className="mt-6 text-[10px] tracking-[0.24em] uppercase text-thread group-hover:translate-x-1 transition-calm">
-              Open the workspace →
+              Weave an intention →
             </p>
           </Link>
         </div>

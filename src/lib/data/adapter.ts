@@ -5,6 +5,9 @@ import {
   type CurrentsReading,
   type Result,
   type SparkSketch,
+  type WeaveEntry,
+  type WeavePlan,
+  type ModuleRunEntry,
 } from "@/lib/data/types";
 
 /**
@@ -18,10 +21,19 @@ export interface DataAdapter {
   saveCurrents(reading: CurrentsReading): Promise<Result<CurrentsReading>>;
   getLoomState(): Promise<Result<StudioState>>;
   saveLoomState(state: StudioState): Promise<Result<StudioState>>;
+  listWeaves(): Promise<Result<WeaveEntry[]>>;
+  saveWeave(plan: WeavePlan): Promise<Result<WeaveEntry>>;
+  listModuleRuns(moduleId?: string): Promise<Result<ModuleRunEntry[]>>;
+  saveModuleRun(run: Omit<ModuleRunEntry, "id">): Promise<Result<ModuleRunEntry>>;
 }
 
 const SPARK_KEY = "creative-studio:spark-sketch:v1";
 const CURRENTS_KEY = "creative-studio:currents:v1";
+const WEAVES_KEY = "nls:weaves:v1";
+const RUNS_KEY = "nls:module-runs:v1";
+
+const uid = () =>
+  (globalThis.crypto?.randomUUID?.() ?? `id-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
 
 const isBrowser = () =>
   typeof window !== "undefined" && typeof localStorage !== "undefined";
@@ -67,6 +79,27 @@ export const localAdapter: DataAdapter = {
     studioStore.save(state);
     return ok(state);
   },
+  async listWeaves() {
+    return ok(readJson<WeaveEntry[]>(WEAVES_KEY) ?? []);
+  },
+  async saveWeave(plan) {
+    const entries = readJson<WeaveEntry[]>(WEAVES_KEY) ?? [];
+    const entry: WeaveEntry = { id: uid(), plan };
+    const next = [entry, ...entries].slice(0, 50);
+    writeJson(WEAVES_KEY, next);
+    return ok(entry);
+  },
+  async listModuleRuns(moduleId) {
+    const all = readJson<ModuleRunEntry[]>(RUNS_KEY) ?? [];
+    return ok(moduleId ? all.filter((r) => r.moduleId === moduleId) : all);
+  },
+  async saveModuleRun(run) {
+    const all = readJson<ModuleRunEntry[]>(RUNS_KEY) ?? [];
+    const entry: ModuleRunEntry = { id: uid(), ...run };
+    const next = [entry, ...all].slice(0, 100);
+    writeJson(RUNS_KEY, next);
+    return ok(entry);
+  },
 };
 
 const remoteUnavailable = () =>
@@ -79,6 +112,10 @@ export const remoteAdapter: DataAdapter = {
   async saveCurrents() { return remoteUnavailable(); },
   async getLoomState() { return remoteUnavailable(); },
   async saveLoomState() { return remoteUnavailable(); },
+  async listWeaves() { return remoteUnavailable(); },
+  async saveWeave() { return remoteUnavailable(); },
+  async listModuleRuns() { return remoteUnavailable(); },
+  async saveModuleRun() { return remoteUnavailable(); },
 };
 
 export const dataAdapter: DataAdapter = localAdapter;
