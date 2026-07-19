@@ -8,7 +8,6 @@ import {
   type WeaveEntry,
   type WeavePlan,
   type ModuleRunEntry,
-  type ModuleRunOutput,
 } from "@/lib/data/types";
 
 /**
