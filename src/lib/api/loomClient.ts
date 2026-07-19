@@ -1,4 +1,5 @@
 import {
+  ok,
   unavailable,
   type LoomModule,
   type MirrorResult,
@@ -6,8 +7,13 @@ import {
   type Result,
   type SparkSketch,
   type CurrentsReading,
+  type WeavePlan,
+  type ModuleRunOutput,
 } from "@/lib/data/types";
 import type { WorkflowTemplate } from "@/lib/modes/workflows";
+import { LOOM_MODULES } from "@/lib/loom/modules";
+import { weave as localWeave, type WeaveRequest } from "@/lib/loom/orchestrator";
+import { runModule } from "@/lib/loom/execute";
 
 /**
  * Thin client for the future Loom backend. Every method currently
@@ -24,6 +30,9 @@ import type { WorkflowTemplate } from "@/lib/modes/workflows";
 
 const AWAITING = "Awaiting Loom engine — will run when connected.";
 
+/** Flip to true once Codex wires a real backend. */
+const USE_REMOTE_LOOM = false;
+
 export interface LoomRunRequest {
   moduleId: string;
   inputs: Record<string, unknown>;
@@ -32,7 +41,7 @@ export interface LoomRunRequest {
 
 export interface LoomRunPacket {
   moduleId: string;
-  output: unknown;
+  output: ModuleRunOutput;
   ranAt: string;
 }
 
@@ -51,13 +60,20 @@ export interface SparkMirrorRequest {
 
 export const loomClient = {
   async listModules(): Promise<Result<LoomModule[]>> {
-    return unavailable(AWAITING);
+    if (USE_REMOTE_LOOM) return unavailable(AWAITING);
+    return ok(LOOM_MODULES);
   },
   async listWorkflows(): Promise<Result<WorkflowTemplate[]>> {
     return unavailable(AWAITING);
   },
-  async run(_req: LoomRunRequest): Promise<Result<LoomRunPacket>> {
-    return unavailable(AWAITING);
+  async run(req: LoomRunRequest): Promise<Result<LoomRunPacket>> {
+    if (USE_REMOTE_LOOM) return unavailable(AWAITING);
+    const output = runModule(req.moduleId, req.inputs);
+    return ok({ moduleId: req.moduleId, output, ranAt: new Date().toISOString() });
+  },
+  async weave(req: WeaveRequest): Promise<Result<WeavePlan>> {
+    if (USE_REMOTE_LOOM) return unavailable(AWAITING);
+    return ok(localWeave(req));
   },
   async reflect(_req: SparkReflectRequest): Promise<Result<SparkSketch>> {
     return unavailable(AWAITING);
