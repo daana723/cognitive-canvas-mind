@@ -5,7 +5,7 @@ import { getLoomModule } from "@/lib/loom/modules";
 import { agentForModule } from "@/lib/loom/agents";
 import { loomClient } from "@/lib/api/loomClient";
 import { dataAdapter } from "@/lib/data/adapter";
-import type { ModuleRunOutput } from "@/lib/data/types";
+import type { LoomModule, LoomModuleInput, ModuleRunOutput } from "@/lib/data/types";
 
 export const Route = createFileRoute("/loom/$moduleId")({
   loader: ({ params }) => {
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/loom/$moduleId")({
 });
 
 function ModuleRunner() {
-  const { module: mod } = Route.useLoaderData();
+  const { module: mod } = Route.useLoaderData() as { module: LoomModule };
   const agent = agentForModule(mod.id);
 
   const [values, setValues] = useState<Record<string, unknown>>(() => {
@@ -43,7 +43,7 @@ function ModuleRunner() {
   const [running, setRunning] = useState(false);
 
   const filled = useMemo(
-    () => mod.inputs.some((i) => String(values[i.id] ?? "").trim().length > 0),
+    () => mod.inputs.some((i: LoomModuleInput) => String(values[i.id] ?? "").trim().length > 0),
     [mod.inputs, values],
   );
 
@@ -92,7 +92,7 @@ function ModuleRunner() {
 
       <div className="mt-10 glass-panel rounded-3xl p-6 sm:p-8">
         <div className="grid gap-5">
-          {mod.inputs.map((input) => (
+          {mod.inputs.map((input: LoomModuleInput) => (
             <label key={input.id} className="block">
               <span className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">
                 {input.label}
@@ -112,7 +112,7 @@ function ModuleRunner() {
                   className="mt-2 w-full rounded-xl bg-background/40 p-3 text-sm outline-none ring-1 ring-border/40 focus:ring-2 focus:ring-thread/60 transition-calm"
                 >
                   <option value="">Choose…</option>
-                  {(input.options ?? []).map((o) => (
+                  {(input.options ?? []).map((o: string) => (
                     <option key={o} value={o}>{o}</option>
                   ))}
                 </select>
