@@ -1,44 +1,93 @@
-# Add missing Loom module stubs before export
+# Merge Indigo Hub's 7-agent constellation over the existing Loom core
 
-Extend `src/lib/loom/modules.ts` so all 8 modules Codex will wire are visible in the contract. No UI, no routes, no behavior change — submit buttons still show "Awaiting Loom engine — will run when connected."
+Keep everything already built. Layer the Indigo Hub constellation on top as the visible Loom interface, and map the current modules to agents instead of replacing them. Deterministic, local-first, no API calls — with a clean seam Codex can slot into later.
 
-## Change
+## Demo shape
 
-**File:** `src/lib/loom/modules.ts` — append three entries to `LOOM_MODULES`.
+> "Bring a messy creative intention. Loom reads the thread, lights up the right agents, and returns a structured creative action plan."
 
-All three follow the existing shape (`id`, `label`, `blurb`, `status: "stub"`, `inputs[]`) and reuse the existing `LoomModuleInput` kinds (`text`, `longtext`, `select`, `tags`).
+Single flow that shows the constellation working end-to-end.
 
-### 1. Platform Adapter
-Reshape one piece of source material for a specific platform without losing its spine.
-- `source` (longtext) — the original piece
-- `platform` (select) — newsletter, x/thread, linkedin, instagram, site, talk
-- `constraint` (text, optional) — length, tone, or audience note
+## Preserved as-is
 
-### 2. Serendipity Lab
-Cross-pollinate the current field with an unexpected adjacent domain to find non-obvious moves.
-- `field` (longtext) — what you're working on
-- `adjacencies` (tags) — domains to borrow from (e.g. cartography, jazz, mycology)
+- SPARK: prompts, currents, mirror, radar, store — untouched.
+- 2E: assessment, OE radar, results — untouched.
+- Existing 7 Loom modules in `src/lib/loom/modules.ts` (signal-collapse, editorial, personas, launch-packets, platform-adapter, serendipity-lab, creative-operator) — kept, not rewritten.
+- `dataAdapter` local-first contract and `Result<T>` shape.
+- `loomClient` method signatures — implementations get filled in locally; endpoint contract stays the same for Codex.
 
-### 3. Creative Operator
-Turn a scattered week of creative activity into the next three concrete moves.
-- `log` (longtext) — recent work, notes, half-finished threads
-- `horizon` (select) — this week, this month, this quarter
-- `energy` (select) — low, steady, high
+## New: agent layer over existing modules
 
-## What does not change
+### 1. Agent registry — `src/lib/loom/agents.ts`
+The 7 Indigo Hub roles: `loom`, `research`, `content`, `product`, `marketing`, `avatar`, `operations`. Each entry: id, label, role, sigil variant, essence, accent color, `moduleIds: string[]` pointing into the existing registry.
 
-- No UI, no routes, no copy, no palette, no components.
-- SPARK flow untouched.
-- `loomClient` stubs unchanged — same "Awaiting Loom engine" contract.
-- `dataAdapter` unchanged.
-- No new dependencies.
+Mapping (existing → agent):
+- **Loom** (orchestrator) — no modules; owns the weave itself.
+- **Research** — `signal-collapse`, `serendipity-lab`
+- **Content** — `editorial`, `personas`
+- **Product** — `launch-packets`
+- **Marketing** — `platform-adapter`
+- **Avatar** — (reserved; SPARK deep reflection surfaces here as a link, not a module)
+- **Operations** — `creative-operator`
+
+Nothing in `modules.ts` changes. Agents are a view over it.
+
+### 2. Weaving phases — `src/lib/loom/phases.ts`
+Ports Indigo Hub's 5 phases verbatim (Intention → Delegation → Return → Automation → Flow). Copy only, used by `/loom` UI.
+
+### 3. Deterministic orchestrator — `src/lib/loom/orchestrator.ts`
+Pure function `weave(intention: { body: string; tags?: string[] }): WeavePlan`.
+
+- Tokenizes the intention, matches keywords + optional tags to agent essences.
+- Returns `{ agents: AgentId[]; steps: Array<{ agentId; moduleId; why }>; artifacts: string[] }`.
+- No LLM, no network. Rules table lives next to the function so it's easy to tune.
+- The mapping is intentionally simple and inspectable — this is the "Loom reads the thread" moment in the demo.
+
+### 4. Local execution — `src/lib/loom/execute.ts`
+`runModule(moduleId, inputs)` returns a deterministic structured plan for each module (headings + bullet scaffolds derived from inputs). This is the "structured creative action plan" the demo returns. Local-first, no API — Codex swaps this file's implementation later without any UI changes.
+
+### 5. Wire `loomClient` to local core
+`src/lib/api/loomClient.ts` keeps its shape but returns `ok(...)` backed by `orchestrator` + `execute` + `LOOM_MODULES`. A single `USE_REMOTE_LOOM` flag (default false) is the seam — when Codex ships, flip it and route through `fetch`. New method: `weave(req)` returning the `WeavePlan`.
+
+### 6. History via `dataAdapter`
+Add `saveWeave` / `listWeaves` and `saveModuleRun` / `listModuleRuns` to `src/lib/data/adapter.ts` (localStorage keys `nls:weaves`, `nls:module-runs`). Types added to `src/lib/data/types.ts`.
+
+## New routes
+
+### 7. `src/routes/loom.tsx` — layout
+AuroraField + a ported ThreadBackground; `<Outlet />`.
+
+### 8. `src/routes/loom.index.tsx` — Intention entry
+Textarea for the messy intention + optional tag chips. On submit → `weave()` → shows: which agents lit up (sigils glowing in order), the phase ribbon, and a "Return the action plan" button that runs each mapped module with defaults and renders the combined plan. Save to history.
+
+### 9. `src/routes/loom.constellation.tsx` — the 7-agent view
+Grid of 7 sigils (Loom centered, hero-sized). Each card lists its mapped modules and links to `/loom/$moduleId`. Follows Indigo Hub's constellation layout.
+
+### 10. `src/routes/loom.$moduleId.tsx` — single module runner
+Renders inputs from `LoomModule.inputs`, runs `execute.runModule`, displays the structured output, saves to history. Uses `getLoomModule`; 404 via `notFoundComponent`.
+
+### 11. `src/routes/index.tsx` — landing
+Third door "Loom" changes copy from "coming" to "the weaving — constellation of 7 agents" and links to `/loom`. SPARK and 2E doors unchanged.
+
+## Visual system port
+
+Recreate two components locally from Indigo Hub (they're TSX; will read via `cross_project--read_project_file` and write into this project):
+- `src/components/loom/Sigil.tsx` — 7 sigil variants used by agent cards.
+- `src/components/loom/ThreadBackground.tsx` — subtle thread motif behind `/loom`.
+
+Add tokens if missing to `src/styles.css`: `--thread`, `--gradient-veil`. No palette overhaul — additive only.
+
+Copy `loom-hero.jpg` and `faceless-avatar.jpg` from Indigo Hub via `cross_project--copy_project_asset` if not already in `src/assets/`.
+
+## Codex seam
+
+The only file Codex needs to replace to plug in a real backend is `src/lib/loom/execute.ts` (and optionally `orchestrator.ts` if they want LLM-based routing). Everything else — UI, module registry, phases, history — stays. The `loomClient` `USE_REMOTE_LOOM` flag flips the transport without UI churn.
 
 ## Verify
 
 - `bunx tsgo --noEmit` clean.
-- Registry now lists 8 modules in this order: signal-collapse, editorial, personas, launch-packets, platform-adapter, serendipity-lab, creative-operator.
-- (The 8th is SPARK deep reflection, which lives in `src/routes/spark.*` — not a Loom module and correctly stays out of the registry.)
-
-## After approval
-
-Once merged, you can export via **+ menu → GitHub → Connect project → Create Repository**, or **Code Editor → Download codebase** for a ZIP. Codex then only has to implement handlers against the endpoints already declared in `src/lib/api/loomClient.ts`.
+- `/` shows the third door active.
+- `/loom` accepts an intention → returns a lit constellation + a combined action plan.
+- `/loom/constellation` shows all 7 sigils and links to module runners.
+- `/loom/editorial` (and others) runs and displays a structured plan.
+- SPARK and 2E flows unchanged.
