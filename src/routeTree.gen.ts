@@ -27,6 +27,7 @@ import { Route as TwoeAssessmentRouteImport } from './routes/twoe.assessment'
 import { Route as SparkReflectRouteImport } from './routes/spark.reflect'
 import { Route as SparkMirrorRouteImport } from './routes/spark.mirror'
 import { Route as SparkCurrentsRouteImport } from './routes/spark.currents'
+import { Route as LoomConstellationRouteImport } from './routes/loom.constellation'
 
 const WorkflowsRoute = WorkflowsRouteImport.update({
   id: '/workflows',
@@ -118,6 +119,11 @@ const SparkCurrentsRoute = SparkCurrentsRouteImport.update({
   path: '/currents',
   getParentRoute: () => SparkRoute,
 } as any)
+const LoomConstellationRoute = LoomConstellationRouteImport.update({
+  id: '/constellation',
+  path: '/constellation',
+  getParentRoute: () => LoomRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/timing': typeof TimingRoute
   '/twoe': typeof TwoeRouteWithChildren
   '/workflows': typeof WorkflowsRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/snapshots': typeof SnapshotsRoute
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/timing': typeof TimingRoute
   '/twoe': typeof TwoeRouteWithChildren
   '/workflows': typeof WorkflowsRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/timing'
     | '/twoe'
     | '/workflows'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/snapshots'
     | '/timing'
     | '/workflows'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/timing'
     | '/twoe'
     | '/workflows'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
@@ -378,14 +390,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparkCurrentsRouteImport
       parentRoute: typeof SparkRoute
     }
+    '/loom/constellation': {
+      id: '/loom/constellation'
+      path: '/constellation'
+      fullPath: '/loom/constellation'
+      preLoaderRoute: typeof LoomConstellationRouteImport
+      parentRoute: typeof LoomRoute
+    }
   }
 }
 
 interface LoomRouteChildren {
+  LoomConstellationRoute: typeof LoomConstellationRoute
   LoomIndexRoute: typeof LoomIndexRoute
 }
 
 const LoomRouteChildren: LoomRouteChildren = {
+  LoomConstellationRoute: LoomConstellationRoute,
   LoomIndexRoute: LoomIndexRoute,
 }
 
