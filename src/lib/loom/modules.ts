@@ -1,88 +1,180 @@
 import type { LoomModule } from "@/lib/data/types";
 
-/**
- * Static registry of Loom modules. Data only — no behavior.
- * Codex owns runtime orchestration; these are stubs until then.
- */
 export const LOOM_MODULES: LoomModule[] = [
   {
-    id: "signal-collapse",
-    label: "Signal Collapse",
-    blurb: "Compress a scattered field into the load-bearing thread.",
-    status: "stub",
+    id: "weave-intention",
+    label: "Weave Intention",
+    blurb: "Bring a scattered intention and let The Loom choose the first agents.",
+    status: "ready",
+    agentId: "loom",
+    access: "free",
     inputs: [
-      { id: "field", label: "The field", kind: "longtext", placeholder: "Everything on your mind about this project." },
-      { id: "constraint", label: "One constraint", kind: "text", placeholder: "Time, audience, medium…" },
+      {
+        id: "intention",
+        label: "Intention",
+        kind: "longtext",
+        placeholder: "A spark, question, project knot, or half-formed idea.",
+      },
+      {
+        id: "tags",
+        label: "Signals",
+        kind: "tags",
+        placeholder: "launch, avatar, draft, product...",
+      },
     ],
   },
   {
-    id: "editorial",
-    label: "Editorial Studio",
+    id: "research-brief",
+    label: "Research Brief",
+    blurb: "Surface the pattern, context, and cleanest next questions.",
+    status: "ready",
+    agentId: "research",
+    access: "free",
+    inputs: [
+      {
+        id: "field",
+        label: "The field",
+        kind: "longtext",
+        placeholder: "What are you exploring, noticing, or trying to understand?",
+      },
+      {
+        id: "question",
+        label: "Question",
+        kind: "text",
+        placeholder: "What would clarity make easier?",
+      },
+    ],
+  },
+  {
+    id: "content-draft",
+    label: "Content Draft",
     blurb: "Shape rough material into publishable form without flattening it.",
-    status: "stub",
+    status: "ready",
+    agentId: "content",
+    access: "studio",
     inputs: [
       { id: "draft", label: "Draft", kind: "longtext" },
-      { id: "intent", label: "Intent", kind: "text", placeholder: "What should the reader leave with?" },
+      {
+        id: "intent",
+        label: "Intent",
+        kind: "text",
+        placeholder: "What should the reader leave with?",
+      },
     ],
   },
   {
-    id: "personas",
-    label: "Creative Personas",
-    blurb: "Voice the work through distinct perspectives to find its real one.",
-    status: "stub",
+    id: "product-vessel",
+    label: "Product Vessel",
+    blurb: "Turn an idea into a simple offer, template, or tool container.",
+    status: "ready",
+    agentId: "product",
+    access: "studio",
     inputs: [
-      { id: "topic", label: "Topic", kind: "text" },
-      { id: "voices", label: "Voices", kind: "tags", placeholder: "curator, skeptic, apprentice…" },
+      { id: "idea", label: "Idea", kind: "longtext" },
+      {
+        id: "format",
+        label: "Format",
+        kind: "select",
+        options: ["template", "guide", "tool", "course", "service"],
+      },
     ],
   },
   {
-    id: "launch-packets",
-    label: "Launch Packets",
-    blurb: "Assemble the small artifacts a release actually needs.",
-    status: "stub",
+    id: "marketing-signal",
+    label: "Marketing Signal",
+    blurb: "Carry the work outward gently, with a clear angle and low-pressure path.",
+    status: "ready",
+    agentId: "marketing",
+    access: "studio",
     inputs: [
       { id: "project", label: "Project", kind: "text" },
-      { id: "channels", label: "Channels", kind: "tags", placeholder: "site, newsletter, social…" },
+      {
+        id: "audience",
+        label: "Audience",
+        kind: "text",
+        placeholder: "Who might this help?",
+      },
+      {
+        id: "channels",
+        label: "Channels",
+        kind: "tags",
+        placeholder: "site, newsletter, social...",
+      },
+    ],
+  },
+  {
+    id: "avatar-voice",
+    label: "Avatar Voice",
+    blurb: "Hold faceless presence, voice anchors, and creative persona coherence.",
+    status: "ready",
+    agentId: "avatar",
+    access: "plus",
+    inputs: [
+      {
+        id: "presence",
+        label: "Presence",
+        kind: "longtext",
+        placeholder: "What should this creative presence feel like?",
+      },
+      {
+        id: "voices",
+        label: "Voice anchors",
+        kind: "tags",
+        placeholder: "warm, precise, mythic, grounded...",
+      },
+    ],
+  },
+  {
+    id: "ops-tending",
+    label: "Operations Tending",
+    blurb: "Turn creative static into the next three low-friction moves.",
+    status: "ready",
+    agentId: "operations",
+    access: "plus",
+    inputs: [
+      {
+        id: "log",
+        label: "Recent log",
+        kind: "longtext",
+        placeholder: "Recent work, notes, half-finished threads.",
+      },
+      {
+        id: "energy",
+        label: "Energy",
+        kind: "select",
+        options: ["low", "steady", "high"],
+      },
     ],
   },
   {
     id: "platform-adapter",
     label: "Platform Adapter",
-    blurb: "Reshape one piece for a specific platform without losing its spine.",
-    status: "stub",
+    blurb: "Reshape one piece for a platform without losing its spine.",
+    status: "ready",
+    agentId: "marketing",
+    access: "studio",
     inputs: [
-      { id: "source", label: "Source piece", kind: "longtext", placeholder: "Paste the original." },
+      {
+        id: "source",
+        label: "Source piece",
+        kind: "longtext",
+        placeholder: "Paste the original.",
+      },
       {
         id: "platform",
         label: "Target platform",
         kind: "select",
-        options: ["newsletter", "x/thread", "linkedin", "instagram", "site", "talk"],
+        options: ["newsletter", "linkedin", "instagram", "site", "talk"],
       },
-      { id: "constraint", label: "Constraint", kind: "text", placeholder: "Length, tone, or audience note." },
-    ],
-  },
-  {
-    id: "serendipity-lab",
-    label: "Serendipity Lab",
-    blurb: "Cross-pollinate the current field with an adjacent domain to find non-obvious moves.",
-    status: "stub",
-    inputs: [
-      { id: "field", label: "The field", kind: "longtext", placeholder: "What you're working on." },
-      { id: "adjacencies", label: "Adjacent domains", kind: "tags", placeholder: "cartography, jazz, mycology…" },
-    ],
-  },
-  {
-    id: "creative-operator",
-    label: "Creative Operator",
-    blurb: "Turn a scattered week of creative activity into the next three concrete moves.",
-    status: "stub",
-    inputs: [
-      { id: "log", label: "Recent log", kind: "longtext", placeholder: "Recent work, notes, half-finished threads." },
-      { id: "horizon", label: "Horizon", kind: "select", options: ["this week", "this month", "this quarter"] },
-      { id: "energy", label: "Energy", kind: "select", options: ["low", "steady", "high"] },
+      {
+        id: "constraint",
+        label: "Constraint",
+        kind: "text",
+        placeholder: "Length, tone, or audience note.",
+      },
     ],
   },
 ];
 
 export const getLoomModule = (id: string): LoomModule | undefined =>
-  LOOM_MODULES.find((m) => m.id === id);
+  LOOM_MODULES.find((module) => module.id === id);

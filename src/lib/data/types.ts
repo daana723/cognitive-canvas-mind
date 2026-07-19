@@ -37,17 +37,20 @@ export interface LoomModuleInput {
   options?: string[];
 }
 
+export type AccessTier = "free" | "plus" | "studio";
+
 export interface LoomModule {
   id: string;
   label: string;
   blurb: string;
   status: "stub" | "ready";
+  agentId?: string;
+  access?: AccessTier;
   inputs: LoomModuleInput[];
 }
 
 export type Result<T> =
-  | { ok: true; data: T }
-  | { ok: false; reason: "unavailable"; message: string };
+  { ok: true; data: T } | { ok: false; reason: "unavailable"; message: string };
 
 export const unavailable = (message: string): Result<never> => ({
   ok: false,

@@ -17,14 +17,18 @@ import { Route as SnapshotsRouteImport } from './routes/snapshots'
 import { Route as ReflectionsRouteImport } from './routes/reflections'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as LoomRouteImport } from './routes/loom'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TwoeIndexRouteImport } from './routes/twoe.index'
 import { Route as SparkIndexRouteImport } from './routes/spark.index'
+import { Route as LoomIndexRouteImport } from './routes/loom.index'
 import { Route as TwoeResultsRouteImport } from './routes/twoe.results'
 import { Route as TwoeAssessmentRouteImport } from './routes/twoe.assessment'
 import { Route as SparkReflectRouteImport } from './routes/spark.reflect'
 import { Route as SparkMirrorRouteImport } from './routes/spark.mirror'
 import { Route as SparkCurrentsRouteImport } from './routes/spark.currents'
+import { Route as LoomConstellationRouteImport } from './routes/loom.constellation'
+import { Route as LoomModuleIdRouteImport } from './routes/loom.$moduleId'
 
 const WorkflowsRoute = WorkflowsRouteImport.update({
   id: '/workflows',
@@ -66,6 +70,11 @@ const MapRoute = MapRouteImport.update({
   path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoomRoute = LoomRouteImport.update({
+  id: '/loom',
+  path: '/loom',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -80,6 +89,11 @@ const SparkIndexRoute = SparkIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => SparkRoute,
+} as any)
+const LoomIndexRoute = LoomIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LoomRoute,
 } as any)
 const TwoeResultsRoute = TwoeResultsRouteImport.update({
   id: '/results',
@@ -106,9 +120,20 @@ const SparkCurrentsRoute = SparkCurrentsRouteImport.update({
   path: '/currents',
   getParentRoute: () => SparkRoute,
 } as any)
+const LoomConstellationRoute = LoomConstellationRouteImport.update({
+  id: '/constellation',
+  path: '/constellation',
+  getParentRoute: () => LoomRoute,
+} as any)
+const LoomModuleIdRoute = LoomModuleIdRouteImport.update({
+  id: '/$moduleId',
+  path: '/$moduleId',
+  getParentRoute: () => LoomRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/loom': typeof LoomRouteWithChildren
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
@@ -117,11 +142,14 @@ export interface FileRoutesByFullPath {
   '/timing': typeof TimingRoute
   '/twoe': typeof TwoeRouteWithChildren
   '/workflows': typeof WorkflowsRoute
+  '/loom/$moduleId': typeof LoomModuleIdRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
   '/twoe/assessment': typeof TwoeAssessmentRoute
   '/twoe/results': typeof TwoeResultsRoute
+  '/loom/': typeof LoomIndexRoute
   '/spark/': typeof SparkIndexRoute
   '/twoe/': typeof TwoeIndexRoute
 }
@@ -133,17 +161,21 @@ export interface FileRoutesByTo {
   '/snapshots': typeof SnapshotsRoute
   '/timing': typeof TimingRoute
   '/workflows': typeof WorkflowsRoute
+  '/loom/$moduleId': typeof LoomModuleIdRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
   '/twoe/assessment': typeof TwoeAssessmentRoute
   '/twoe/results': typeof TwoeResultsRoute
+  '/loom': typeof LoomIndexRoute
   '/spark': typeof SparkIndexRoute
   '/twoe': typeof TwoeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/loom': typeof LoomRouteWithChildren
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
@@ -152,11 +184,14 @@ export interface FileRoutesById {
   '/timing': typeof TimingRoute
   '/twoe': typeof TwoeRouteWithChildren
   '/workflows': typeof WorkflowsRoute
+  '/loom/$moduleId': typeof LoomModuleIdRoute
+  '/loom/constellation': typeof LoomConstellationRoute
   '/spark/currents': typeof SparkCurrentsRoute
   '/spark/mirror': typeof SparkMirrorRoute
   '/spark/reflect': typeof SparkReflectRoute
   '/twoe/assessment': typeof TwoeAssessmentRoute
   '/twoe/results': typeof TwoeResultsRoute
+  '/loom/': typeof LoomIndexRoute
   '/spark/': typeof SparkIndexRoute
   '/twoe/': typeof TwoeIndexRoute
 }
@@ -164,6 +199,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/loom'
     | '/map'
     | '/modes'
     | '/reflections'
@@ -172,11 +208,14 @@ export interface FileRouteTypes {
     | '/timing'
     | '/twoe'
     | '/workflows'
+    | '/loom/$moduleId'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
     | '/twoe/assessment'
     | '/twoe/results'
+    | '/loom/'
     | '/spark/'
     | '/twoe/'
   fileRoutesByTo: FileRoutesByTo
@@ -188,16 +227,20 @@ export interface FileRouteTypes {
     | '/snapshots'
     | '/timing'
     | '/workflows'
+    | '/loom/$moduleId'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
     | '/twoe/assessment'
     | '/twoe/results'
+    | '/loom'
     | '/spark'
     | '/twoe'
   id:
     | '__root__'
     | '/'
+    | '/loom'
     | '/map'
     | '/modes'
     | '/reflections'
@@ -206,17 +249,21 @@ export interface FileRouteTypes {
     | '/timing'
     | '/twoe'
     | '/workflows'
+    | '/loom/$moduleId'
+    | '/loom/constellation'
     | '/spark/currents'
     | '/spark/mirror'
     | '/spark/reflect'
     | '/twoe/assessment'
     | '/twoe/results'
+    | '/loom/'
     | '/spark/'
     | '/twoe/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoomRoute: typeof LoomRouteWithChildren
   MapRoute: typeof MapRoute
   ModesRoute: typeof ModesRoute
   ReflectionsRoute: typeof ReflectionsRoute
@@ -285,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loom': {
+      id: '/loom'
+      path: '/loom'
+      fullPath: '/loom'
+      preLoaderRoute: typeof LoomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -305,6 +359,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/spark/'
       preLoaderRoute: typeof SparkIndexRouteImport
       parentRoute: typeof SparkRoute
+    }
+    '/loom/': {
+      id: '/loom/'
+      path: '/'
+      fullPath: '/loom/'
+      preLoaderRoute: typeof LoomIndexRouteImport
+      parentRoute: typeof LoomRoute
     }
     '/twoe/results': {
       id: '/twoe/results'
@@ -341,8 +402,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparkCurrentsRouteImport
       parentRoute: typeof SparkRoute
     }
+    '/loom/constellation': {
+      id: '/loom/constellation'
+      path: '/constellation'
+      fullPath: '/loom/constellation'
+      preLoaderRoute: typeof LoomConstellationRouteImport
+      parentRoute: typeof LoomRoute
+    }
+    '/loom/$moduleId': {
+      id: '/loom/$moduleId'
+      path: '/$moduleId'
+      fullPath: '/loom/$moduleId'
+      preLoaderRoute: typeof LoomModuleIdRouteImport
+      parentRoute: typeof LoomRoute
+    }
   }
 }
+
+interface LoomRouteChildren {
+  LoomModuleIdRoute: typeof LoomModuleIdRoute
+  LoomConstellationRoute: typeof LoomConstellationRoute
+  LoomIndexRoute: typeof LoomIndexRoute
+}
+
+const LoomRouteChildren: LoomRouteChildren = {
+  LoomModuleIdRoute: LoomModuleIdRoute,
+  LoomConstellationRoute: LoomConstellationRoute,
+  LoomIndexRoute: LoomIndexRoute,
+}
+
+const LoomRouteWithChildren = LoomRoute._addFileChildren(LoomRouteChildren)
 
 interface SparkRouteChildren {
   SparkCurrentsRoute: typeof SparkCurrentsRoute
@@ -376,6 +465,7 @@ const TwoeRouteWithChildren = TwoeRoute._addFileChildren(TwoeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoomRoute: LoomRouteWithChildren,
   MapRoute: MapRoute,
   ModesRoute: ModesRoute,
   ReflectionsRoute: ReflectionsRoute,
