@@ -31,8 +31,8 @@ function LoomEntry() {
     const tagList = tags.split(",").map((t) => t.trim()).filter(Boolean);
     const res = await loomClient.weave({ body, tags: tagList });
     if (res.ok) {
-      setPlan(res.value);
-      await dataAdapter.saveWeave(res.value);
+      setPlan(res.data);
+      await dataAdapter.saveWeave(res.data);
     }
     setWeaving(false);
   }
