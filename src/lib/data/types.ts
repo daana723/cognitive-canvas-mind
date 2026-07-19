@@ -45,6 +45,54 @@ export interface LoomModule {
   inputs: LoomModuleInput[];
 }
 
+export type AgentId =
+  | "loom"
+  | "research"
+  | "content"
+  | "product"
+  | "marketing"
+  | "avatar"
+  | "operations";
+
+export interface WeaveStep {
+  agentId: AgentId;
+  moduleId: string;
+  why: string;
+}
+
+export interface WeavePlan {
+  intention: string;
+  tags: string[];
+  agents: AgentId[];
+  steps: WeaveStep[];
+  artifacts: string[];
+  wovenAt: string;
+}
+
+export interface WeaveEntry {
+  id: string;
+  plan: WeavePlan;
+}
+
+export interface ModuleRunEntry {
+  id: string;
+  moduleId: string;
+  inputs: Record<string, unknown>;
+  output: ModuleRunOutput;
+  ranAt: string;
+}
+
+export interface ModuleRunSection {
+  heading: string;
+  bullets: string[];
+}
+
+export interface ModuleRunOutput {
+  summary: string;
+  sections: ModuleRunSection[];
+  nextMoves: string[];
+}
+
 export type Result<T> =
   | { ok: true; data: T }
   | { ok: false; reason: "unavailable"; message: string };
