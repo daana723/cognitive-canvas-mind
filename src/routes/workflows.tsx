@@ -10,7 +10,10 @@ export const Route = createFileRoute("/workflows")({
   head: () => ({
     meta: [
       { title: "Workflows — Creative Studio" },
-      { name: "description", content: "Workflow templates tuned to the mode you chose." },
+      {
+        name: "description",
+        content: "Active Loom workflows for unfreezing, shaping, and shipping creative work.",
+      },
     ],
   }),
   component: WorkflowsPage,
@@ -18,7 +21,9 @@ export const Route = createFileRoute("/workflows")({
 
 function WorkflowsPage() {
   const [mode, setMode] = useState<ModeId | undefined>();
-  useEffect(() => { setMode(studioStore.load().currentMode); }, []);
+  useEffect(() => {
+    setMode(studioStore.load().currentMode);
+  }, []);
 
   const list = mode ? workflowsFor(mode) : WORKFLOWS;
   const m = mode ? getMode(mode) : null;
@@ -28,36 +33,66 @@ function WorkflowsPage() {
       <AuroraField />
       <header className="relative z-10 mx-auto flex max-w-4xl items-center justify-between px-6 py-8">
         <Link to="/" className="flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full breathe" style={{ background: "var(--gradient-thread)" }} />
+          <span
+            className="h-2 w-2 rounded-full breathe"
+            style={{ background: "var(--gradient-thread)" }}
+          />
           <span className="font-display text-base tracking-wide">Creative Studio</span>
         </Link>
-        <Link to="/modes" className="text-xs tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm">
+        <Link
+          to="/modes"
+          className="text-xs tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground transition-calm"
+        >
           Modes →
         </Link>
       </header>
 
       <section className="relative z-10 mx-auto max-w-3xl px-6 pt-8">
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground mb-4 fade-up">
-          Workflow clarity
+          Unfreeze studio
         </p>
-        <h1 className="font-display text-5xl leading-[1.05] fade-up" style={{ animationDelay: "60ms" }}>
-          Templates for <span className="text-thread italic">{m ? m.label.toLowerCase() : "any mode"}</span>.
+        <h1
+          className="font-display text-5xl leading-[1.05] fade-up"
+          style={{ animationDelay: "60ms" }}
+        >
+          Workflows for{" "}
+          <span className="text-thread italic">
+            {m ? m.label.toLowerCase() : "getting unstuck"}
+          </span>
+          .
         </h1>
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground fade-up" style={{ animationDelay: "160ms" }}>
-          These are experiments, not prescriptions. Try one. Notice what it gave you.
-          Adjust the next one. The studio learns nothing about you from your choice.
+        <p
+          className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground fade-up"
+          style={{ animationDelay: "160ms" }}
+        >
+          Bring the messy thought, the too-many-options field, or the almost-ready draft. Each card
+          now runs through Loom and returns a structured next move, not just a checklist.
         </p>
       </section>
 
       <section className="relative z-10 mx-auto mt-8 max-w-3xl px-6">
         <div className="glass-panel rounded-2xl p-4">
-          <p className="mb-3 text-[10px] tracking-[0.28em] uppercase text-muted-foreground">Filter by mode</p>
+          <p className="mb-3 text-[10px] tracking-[0.28em] uppercase text-muted-foreground">
+            Choose a lens
+          </p>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => { setMode(undefined); studioStore.update((s) => ({ ...s, currentMode: undefined })); }}
-              className={"rounded-full px-4 py-2 text-[11px] tracking-[0.2em] uppercase transition-calm " + (mode ? "border border-border/60 text-muted-foreground hover:text-foreground" : "text-foreground")}
-              style={mode ? undefined : { background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)" }}
+              onClick={() => {
+                setMode(undefined);
+                studioStore.update((s) => ({ ...s, currentMode: undefined }));
+              }}
+              className={
+                "rounded-full px-4 py-2 text-[11px] tracking-[0.2em] uppercase transition-calm " +
+                (mode
+                  ? "border border-border/60 text-muted-foreground hover:text-foreground"
+                  : "text-foreground")
+              }
+              style={
+                mode
+                  ? undefined
+                  : { background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)" }
+              }
             >
               All
             </button>
@@ -67,7 +102,10 @@ function WorkflowsPage() {
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => { setMode(opt.id); studioStore.update((s) => ({ ...s, currentMode: opt.id })); }}
+                  onClick={() => {
+                    setMode(opt.id);
+                    studioStore.update((s) => ({ ...s, currentMode: opt.id }));
+                  }}
                   className="rounded-full px-4 py-2 text-[11px] tracking-[0.2em] uppercase transition-calm"
                   style={
                     active
@@ -91,7 +129,7 @@ function WorkflowsPage() {
         ))}
         {list.length === 0 && (
           <p className="text-center text-sm italic text-muted-foreground">
-            No templates for this mode yet.
+            No active workflows for this lens yet.
           </p>
         )}
       </section>

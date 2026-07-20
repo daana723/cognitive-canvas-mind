@@ -1,6 +1,6 @@
 /**
  * Stable data contracts shared with Codex (backend).
- * Pure types only — no runtime, no imports from React/DOM/fetch.
+ * Pure types only - no runtime, no imports from React/DOM/fetch.
  */
 
 export type ModeId = "flux" | "depth" | "signal" | "myth" | "pulse";
@@ -41,18 +41,13 @@ export interface LoomModule {
   id: string;
   label: string;
   blurb: string;
-  status: "stub" | "ready";
+  status: "ready";
+  access: "free" | "plus" | "studio";
   inputs: LoomModuleInput[];
 }
 
 export type AgentId =
-  | "loom"
-  | "research"
-  | "content"
-  | "product"
-  | "marketing"
-  | "avatar"
-  | "operations";
+  "loom" | "research" | "content" | "product" | "marketing" | "avatar" | "operations";
 
 export interface WeaveStep {
   agentId: AgentId;
@@ -95,7 +90,12 @@ export interface ModuleRunOutput {
 
 export type Result<T> =
   | { ok: true; data: T }
-  | { ok: false; reason: "unavailable"; message: string };
+  | {
+      ok: false;
+      reason: "unavailable" | "validation_error" | "not_found" | "execution_error";
+      message: string;
+      details?: Record<string, unknown>;
+    };
 
 export const unavailable = (message: string): Result<never> => ({
   ok: false,
@@ -104,3 +104,5 @@ export const unavailable = (message: string): Result<never> => ({
 });
 
 export const ok = <T>(data: T): Result<T> => ({ ok: true, data });
+
+export type { CognitiveContext } from "@/lib/cognition/types";

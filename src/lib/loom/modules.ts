@@ -1,55 +1,85 @@
 import type { LoomModule } from "@/lib/data/types";
 
 /**
- * Static registry of Loom modules. Data only — no behavior.
- * Codex owns runtime orchestration; these are stubs until then.
+ * Static registry of Loom modules. Data only - no behavior.
+ * Runtime execution lives in execute.ts and stays local-first.
  */
 export const LOOM_MODULES: LoomModule[] = [
   {
     id: "signal-collapse",
     label: "Signal Collapse",
     blurb: "Compress a scattered field into the load-bearing thread.",
-    status: "stub",
+    status: "ready",
+    access: "free",
     inputs: [
-      { id: "field", label: "The field", kind: "longtext", placeholder: "Everything on your mind about this project." },
-      { id: "constraint", label: "One constraint", kind: "text", placeholder: "Time, audience, medium…" },
+      {
+        id: "field",
+        label: "The field",
+        kind: "longtext",
+        placeholder: "Everything on your mind about this project.",
+      },
+      {
+        id: "constraint",
+        label: "One constraint",
+        kind: "text",
+        placeholder: "Time, audience, medium...",
+      },
     ],
   },
   {
     id: "editorial",
     label: "Editorial Studio",
     blurb: "Shape rough material into publishable form without flattening it.",
-    status: "stub",
+    status: "ready",
+    access: "studio",
     inputs: [
       { id: "draft", label: "Draft", kind: "longtext" },
-      { id: "intent", label: "Intent", kind: "text", placeholder: "What should the reader leave with?" },
+      {
+        id: "intent",
+        label: "Intent",
+        kind: "text",
+        placeholder: "What should the reader leave with?",
+      },
     ],
   },
   {
     id: "personas",
     label: "Creative Personas",
     blurb: "Voice the work through distinct perspectives to find its real one.",
-    status: "stub",
+    status: "ready",
+    access: "plus",
     inputs: [
       { id: "topic", label: "Topic", kind: "text" },
-      { id: "voices", label: "Voices", kind: "tags", placeholder: "curator, skeptic, apprentice…" },
+      {
+        id: "voices",
+        label: "Voices",
+        kind: "tags",
+        placeholder: "curator, skeptic, apprentice...",
+      },
     ],
   },
   {
     id: "launch-packets",
     label: "Launch Packets",
     blurb: "Assemble the small artifacts a release actually needs.",
-    status: "stub",
+    status: "ready",
+    access: "studio",
     inputs: [
       { id: "project", label: "Project", kind: "text" },
-      { id: "channels", label: "Channels", kind: "tags", placeholder: "site, newsletter, social…" },
+      {
+        id: "channels",
+        label: "Channels",
+        kind: "tags",
+        placeholder: "site, newsletter, social...",
+      },
     ],
   },
   {
     id: "platform-adapter",
     label: "Platform Adapter",
     blurb: "Reshape one piece for a specific platform without losing its spine.",
-    status: "stub",
+    status: "ready",
+    access: "studio",
     inputs: [
       { id: "source", label: "Source piece", kind: "longtext", placeholder: "Paste the original." },
       {
@@ -58,27 +88,49 @@ export const LOOM_MODULES: LoomModule[] = [
         kind: "select",
         options: ["newsletter", "x/thread", "linkedin", "instagram", "site", "talk"],
       },
-      { id: "constraint", label: "Constraint", kind: "text", placeholder: "Length, tone, or audience note." },
+      {
+        id: "constraint",
+        label: "Constraint",
+        kind: "text",
+        placeholder: "Length, tone, or audience note.",
+      },
     ],
   },
   {
     id: "serendipity-lab",
     label: "Serendipity Lab",
     blurb: "Cross-pollinate the current field with an adjacent domain to find non-obvious moves.",
-    status: "stub",
+    status: "ready",
+    access: "plus",
     inputs: [
       { id: "field", label: "The field", kind: "longtext", placeholder: "What you're working on." },
-      { id: "adjacencies", label: "Adjacent domains", kind: "tags", placeholder: "cartography, jazz, mycology…" },
+      {
+        id: "adjacencies",
+        label: "Adjacent domains",
+        kind: "tags",
+        placeholder: "cartography, jazz, mycology...",
+      },
     ],
   },
   {
     id: "creative-operator",
     label: "Creative Operator",
     blurb: "Turn a scattered week of creative activity into the next three concrete moves.",
-    status: "stub",
+    status: "ready",
+    access: "studio",
     inputs: [
-      { id: "log", label: "Recent log", kind: "longtext", placeholder: "Recent work, notes, half-finished threads." },
-      { id: "horizon", label: "Horizon", kind: "select", options: ["this week", "this month", "this quarter"] },
+      {
+        id: "log",
+        label: "Recent log",
+        kind: "longtext",
+        placeholder: "Recent work, notes, half-finished threads.",
+      },
+      {
+        id: "horizon",
+        label: "Horizon",
+        kind: "select",
+        options: ["this week", "this month", "this quarter"],
+      },
       { id: "energy", label: "Energy", kind: "select", options: ["low", "steady", "high"] },
     ],
   },

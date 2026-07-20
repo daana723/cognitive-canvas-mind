@@ -7,12 +7,11 @@ export interface WeaveRequest {
   tags?: string[];
 }
 
-const tokenize = (s: string): string[] =>
-  s.toLowerCase().match(/[a-z]{3,}/g) ?? [];
+const tokenize = (s: string): string[] => s.toLowerCase().match(/[a-z]{3,}/g) ?? [];
 
 /**
  * Deterministic, inspectable orchestrator. No LLM. No network.
- * Codex can swap this implementation later; the shape is the seam.
+ * Codex can swap this implementation later; the shape is the boundary.
  */
 export function weave(req: WeaveRequest): WeavePlan {
   const body = req.body ?? "";
@@ -45,7 +44,7 @@ export function weave(req: WeaveRequest): WeavePlan {
       steps.push({
         agentId: agent.id,
         moduleId,
-        why: `${agent.label} · ${mod.label} — ${mod.blurb}`,
+        why: `${agent.label} - ${mod.label}: ${mod.blurb}`,
       });
       break; // one lead module per agent keeps the plan legible
     }

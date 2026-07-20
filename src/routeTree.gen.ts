@@ -18,6 +18,7 @@ import { Route as ReflectionsRouteImport } from './routes/reflections'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as LoomRouteImport } from './routes/loom'
+import { Route as CompanionRouteImport } from './routes/companion'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TwoeIndexRouteImport } from './routes/twoe.index'
 import { Route as SparkIndexRouteImport } from './routes/spark.index'
@@ -73,6 +74,11 @@ const MapRoute = MapRouteImport.update({
 const LoomRoute = LoomRouteImport.update({
   id: '/loom',
   path: '/loom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanionRoute = CompanionRouteImport.update({
+  id: '/companion',
+  path: '/companion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -133,6 +139,7 @@ const LoomModuleIdRoute = LoomModuleIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/companion': typeof CompanionRoute
   '/loom': typeof LoomRouteWithChildren
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/companion': typeof CompanionRoute
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
   '/reflections': typeof ReflectionsRoute
@@ -175,6 +183,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/companion': typeof CompanionRoute
   '/loom': typeof LoomRouteWithChildren
   '/map': typeof MapRoute
   '/modes': typeof ModesRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/companion'
     | '/loom'
     | '/map'
     | '/modes'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/companion'
     | '/map'
     | '/modes'
     | '/reflections'
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/companion'
     | '/loom'
     | '/map'
     | '/modes'
@@ -263,6 +275,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CompanionRoute: typeof CompanionRoute
   LoomRoute: typeof LoomRouteWithChildren
   MapRoute: typeof MapRoute
   ModesRoute: typeof ModesRoute
@@ -337,6 +350,13 @@ declare module '@tanstack/react-router' {
       path: '/loom'
       fullPath: '/loom'
       preLoaderRoute: typeof LoomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companion': {
+      id: '/companion'
+      path: '/companion'
+      fullPath: '/companion'
+      preLoaderRoute: typeof CompanionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -465,6 +485,7 @@ const TwoeRouteWithChildren = TwoeRoute._addFileChildren(TwoeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CompanionRoute: CompanionRoute,
   LoomRoute: LoomRouteWithChildren,
   MapRoute: MapRoute,
   ModesRoute: ModesRoute,
@@ -478,3 +499,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -3,14 +3,18 @@ import type { ModuleRunOutput } from "@/lib/data/types";
 
 /**
  * Deterministic local execution for each module. Codex replaces the body
- * of this file to plug in a real backend — the return shape is the contract.
+ * of this file to plug in a real backend - the return shape is the contract.
  */
 
 const s = (v: unknown): string =>
   typeof v === "string" ? v.trim() : Array.isArray(v) ? v.join(", ") : "";
 
 const list = (v: unknown): string[] => {
-  if (Array.isArray(v)) return v.map(String).map((x) => x.trim()).filter(Boolean);
+  if (Array.isArray(v))
+    return v
+      .map(String)
+      .map((x) => x.trim())
+      .filter(Boolean);
   if (typeof v === "string")
     return v
       .split(/[,\n]/)
@@ -29,28 +33,59 @@ const trimLines = (v: unknown, max = 6): string[] =>
 type Inputs = Record<string, unknown>;
 
 function runSignalCollapse(i: Inputs): ModuleRunOutput {
-  const lines = trimLines(i.field);
-  const constraint = s(i.constraint) || "no explicit constraint";
+  const field = s(i.field);
+  const lineFragments = trimLines(field, 8);
+  const sentenceFragments = field
+    .split(/(?<=[.!?])\s+/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .slice(0, 6);
+  const fragments =
+    lineFragments.length > 1
+      ? lineFragments
+      : sentenceFragments.length
+        ? sentenceFragments
+        : lineFragments;
+  const constraint = s(i.constraint) || "one tiny useful output";
+  const first = fragments[0] || field || "the idea that keeps asking for attention";
+  const second = fragments[1];
+  const third = fragments[2];
+  const thread = first.length > 140 ? `${first.slice(0, 137)}...` : first;
+
   return {
-    summary: `Compressing ${lines.length || "the"} scattered signal${lines.length === 1 ? "" : "s"} against: ${constraint}.`,
+    summary: `The thread to hold now is: ${thread}`,
     sections: [
       {
-        heading: "Load-bearing thread",
-        bullets: lines.slice(0, 3).length
-          ? lines.slice(0, 3).map((l) => `Keep: ${l}`)
-          : ["Name the one thread the rest hangs on."],
+        heading: "Chosen thread",
+        bullets: [
+          `Start with this because it already has emotional charge and visible friction: ${first}`,
+          `Make the container small: ${constraint}.`,
+        ],
       },
       {
-        heading: "Set down (for now)",
-        bullets: lines.slice(3, 6).length
-          ? lines.slice(3, 6).map((l) => `Park: ${l}`)
-          : ["List the strands you're not carrying this cycle."],
+        heading: "Park for later",
+        bullets: [
+          second
+            ? `Park: ${second}`
+            : "All alternate versions, research loops, and future expansions.",
+          third
+            ? `Park: ${third}`
+            : "Anything that requires a bigger plan before the first artifact exists.",
+        ],
+      },
+      {
+        heading: "Tiny artifact",
+        bullets: [
+          'Draft one sentence that begins: "I keep circling this because..."',
+          "Turn that sentence into either a rough post opening or a five-minute action.",
+          "Stop before reorganizing the whole system.",
+        ],
       },
     ],
     nextMoves: [
-      "Write the load-bearing thread in one sentence.",
-      `Test it against the constraint: ${constraint}.`,
-      "If it survives, commit for one cycle.",
+      "Open a blank note and copy only the chosen thread.",
+      `Make the smallest version that satisfies: ${constraint}.`,
+      "Set a 5-minute timer. When it ends, decide: ship, shape, or park.",
     ],
   };
 }
@@ -65,11 +100,25 @@ function runEditorial(i: Inputs): ModuleRunOutput {
       {
         heading: "Spine",
         bullets: lines.slice(0, 3).length
-          ? lines.slice(0, 3).map((l) => `→ ${l}`)
+          ? lines.slice(0, 3).map((l) => `- ${l}`)
           : ["Draft the load-bearing sentence."],
       },
-      { heading: "What to cut", bullets: ["Anything that only proves you thought about it.", "Anything that repeats the spine.", "Anything the reader will not use."] },
-      { heading: "What to strengthen", bullets: ["The opening (earn the read).", "The turn (where the reader shifts).", "The last sentence (what they leave with)."] },
+      {
+        heading: "What to cut",
+        bullets: [
+          "Anything that only proves you thought about it.",
+          "Anything that repeats the spine.",
+          "Anything the reader will not use.",
+        ],
+      },
+      {
+        heading: "What to strengthen",
+        bullets: [
+          "The opening (earn the read).",
+          "The turn (where the reader shifts).",
+          "The last sentence (what they leave with).",
+        ],
+      },
     ],
     nextMoves: ["Rewrite opening.", "Sharpen the turn.", "Rewrite the closing to land the intent."],
   };
@@ -103,11 +152,33 @@ function runLaunchPackets(i: Inputs): ModuleRunOutput {
   return {
     summary: `Packet for "${project}" across ${channels.join(", ")}.`,
     sections: [
-      { heading: "Core artifacts", bullets: ["One-line pitch.", "One paragraph.", "One-page overview.", "Cover image / motif."] },
-      { heading: "Per-channel adaptations", bullets: channels.map((c) => `${c}: shortest version that still carries the spine.`) },
-      { heading: "Proof", bullets: ["One quote or moment that shows it works.", "One screenshot or artifact.", "One next step for the reader."] },
+      {
+        heading: "Core artifacts",
+        bullets: [
+          "One-line pitch.",
+          "One paragraph.",
+          "One-page overview.",
+          "Cover image / motif.",
+        ],
+      },
+      {
+        heading: "Per-channel adaptations",
+        bullets: channels.map((c) => `${c}: shortest version that still carries the spine.`),
+      },
+      {
+        heading: "Proof",
+        bullets: [
+          "One quote or moment that shows it works.",
+          "One screenshot or artifact.",
+          "One next step for the reader.",
+        ],
+      },
     ],
-    nextMoves: ["Write the one-liner first.", "Expand only when it's honest.", "Ship the smallest complete packet."],
+    nextMoves: [
+      "Write the one-liner first.",
+      "Expand only when it's honest.",
+      "Ship the smallest complete packet.",
+    ],
   };
 }
 
@@ -119,18 +190,25 @@ function runPlatformAdapter(i: Inputs): ModuleRunOutput {
   return {
     summary: `Reshaping the source for ${platform}. Constraint: ${constraint}.`,
     sections: [
-      { heading: "Spine to preserve", bullets: seed.length ? seed : ["Extract the load-bearing sentence before reshaping."] },
+      {
+        heading: "Spine to preserve",
+        bullets: seed.length ? seed : ["Extract the load-bearing sentence before reshaping."],
+      },
       {
         heading: `${platform} adaptation`,
         bullets: [
           "Native opening line (matches the platform's grammar).",
           "One tension the reader recognizes in the first scroll.",
-          "The turn — where the piece earns its ending.",
+          "The turn - where the piece earns its ending.",
           "A closing that invites a small action.",
         ],
       },
     ],
-    nextMoves: [`Draft the ${platform} version.`, "Read it aloud against the spine.", "Cut anything that only makes sense elsewhere."],
+    nextMoves: [
+      `Draft the ${platform} version.`,
+      "Read it aloud against the spine.",
+      "Cut anything that only makes sense elsewhere.",
+    ],
   };
 }
 
@@ -164,12 +242,24 @@ function runCreativeOperator(i: Inputs): ModuleRunOutput {
   return {
     summary: `Reading the log for ${horizon} at ${energy} energy.`,
     sections: [
-      { heading: "Threads active", bullets: lines.length ? lines : ["Name what's still moving.", "Name what's stalled.", "Name what's finished."] },
-      { heading: "Match to energy", bullets: energy === "low"
-        ? ["Small, closing work. Nothing new opened."]
-        : energy === "high"
-          ? ["Open the one thing that scares you.", "Close one thing that's overdue.", "Rest before you spend it all."]
-          : ["One opening, one closing, one refinement."],
+      {
+        heading: "Threads active",
+        bullets: lines.length
+          ? lines
+          : ["Name what's still moving.", "Name what's stalled.", "Name what's finished."],
+      },
+      {
+        heading: "Match to energy",
+        bullets:
+          energy === "low"
+            ? ["Small, closing work. Nothing new opened."]
+            : energy === "high"
+              ? [
+                  "Open the one thing that scares you.",
+                  "Close one thing that's overdue.",
+                  "Rest before you spend it all.",
+                ]
+              : ["One opening, one closing, one refinement."],
       },
     ],
     nextMoves: [
@@ -182,8 +272,8 @@ function runCreativeOperator(i: Inputs): ModuleRunOutput {
 
 const RUNNERS: Record<string, (i: Inputs) => ModuleRunOutput> = {
   "signal-collapse": runSignalCollapse,
-  "editorial": runEditorial,
-  "personas": runPersonas,
+  editorial: runEditorial,
+  personas: runPersonas,
   "launch-packets": runLaunchPackets,
   "platform-adapter": runPlatformAdapter,
   "serendipity-lab": runSerendipity,
