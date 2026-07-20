@@ -18,7 +18,9 @@ export const Route = createFileRoute("/loom/$moduleId")({
     <section className="mx-auto max-w-3xl px-6 py-24 text-center">
       <h1 className="font-display text-3xl">No such module.</h1>
       <p className="mt-4 text-muted-foreground">
-        <Link to="/loom/constellation" className="text-thread">Return to the constellation →</Link>
+        <Link to="/loom/constellation" className="text-thread">
+          Return to the constellation →
+        </Link>
       </p>
     </section>
   ),
@@ -52,9 +54,13 @@ function ModuleRunner() {
     const inputs: Record<string, unknown> = {};
     for (const input of mod.inputs) {
       const raw = String(values[input.id] ?? "");
-      inputs[input.id] = input.kind === "tags"
-        ? raw.split(",").map((t) => t.trim()).filter(Boolean)
-        : raw;
+      inputs[input.id] =
+        input.kind === "tags"
+          ? raw
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean)
+          : raw;
     }
     const res = await loomClient.run({ moduleId: mod.id, inputs });
     if (res.ok) {
@@ -71,7 +77,10 @@ function ModuleRunner() {
 
   return (
     <section className="mx-auto max-w-4xl px-6 pt-8 pb-24">
-      <Link to="/loom/constellation" className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground hover:text-foreground transition-calm">
+      <Link
+        to="/loom/constellation"
+        className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground hover:text-foreground transition-calm"
+      >
         ← Constellation
       </Link>
 
@@ -113,7 +122,9 @@ function ModuleRunner() {
                 >
                   <option value="">Choose…</option>
                   {(input.options ?? []).map((o: string) => (
-                    <option key={o} value={o}>{o}</option>
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
                   ))}
                 </select>
               ) : (
@@ -129,7 +140,9 @@ function ModuleRunner() {
         </div>
 
         <div className="mt-6 flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">Local · deterministic · saved to your device.</p>
+          <p className="text-xs text-muted-foreground">
+            Local - LM Studio when enabled - saved to your device.
+          </p>
           <button
             type="button"
             onClick={onRun}
@@ -144,9 +157,7 @@ function ModuleRunner() {
 
       {output && (
         <div className="mt-10 fade-up">
-          <p className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">
-            Return
-          </p>
+          <p className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">Return</p>
           <h2 className="mt-2 font-display text-2xl">{output.summary}</h2>
 
           <div className="mt-6 grid gap-4">
@@ -155,7 +166,9 @@ function ModuleRunner() {
                 <p className="text-[10px] tracking-[0.24em] uppercase text-thread">{s.heading}</p>
                 <ul className="mt-3 space-y-2">
                   {s.bullets.map((b, i) => (
-                    <li key={i} className="text-sm leading-relaxed text-foreground/90">— {b}</li>
+                    <li key={i} className="text-sm leading-relaxed text-foreground/90">
+                      — {b}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -167,7 +180,9 @@ function ModuleRunner() {
               <p className="text-[10px] tracking-[0.24em] uppercase text-thread">Next moves</p>
               <ol className="mt-3 space-y-2 list-decimal list-inside">
                 {output.nextMoves.map((n, i) => (
-                  <li key={i} className="text-sm leading-relaxed text-foreground/90">{n}</li>
+                  <li key={i} className="text-sm leading-relaxed text-foreground/90">
+                    {n}
+                  </li>
                 ))}
               </ol>
             </div>

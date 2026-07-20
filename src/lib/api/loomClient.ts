@@ -32,6 +32,7 @@ const AWAITING = "Awaiting Loom engine - will run when connected.";
 
 /** Flip to true once Codex wires a real backend. */
 const USE_REMOTE_LOOM = false;
+const USE_LM_STUDIO = import.meta.env.VITE_LOOM_USE_LM_STUDIO === "true";
 
 type ErrorReason = Exclude<Result<never>, { ok: true }>["reason"];
 
@@ -102,6 +103,18 @@ export const loomClient = {
         `"${invalidSelect.label}" needs one of the supported options.`,
         { field: invalidSelect.id, options: invalidSelect.options ?? [] },
       );
+    }
+
+    if (USE_LM_STUDIO) {
+      try {
+        const { runLoomModuleWithLocalModel } = await import("@/lib/api/loomLmStudio.functions");
+        const output = await runLoomModuleWithLocalModel({
+          data: { moduleId: req.moduleId, inputs: req.inputs },
+        });
+        return ok({ moduleId: req.moduleId, output, ranAt: new Date().toISOString() });
+      } catch (cause) {
+        console.warn("LM Studio Loom run failed; falling back to deterministic runner.", cause);
+      }
     }
 
     try {
