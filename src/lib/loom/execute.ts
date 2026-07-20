@@ -3,14 +3,18 @@ import type { ModuleRunOutput } from "@/lib/data/types";
 
 /**
  * Deterministic local execution for each module. Codex replaces the body
- * of this file to plug in a real backend — the return shape is the contract.
+ * of this file to plug in a real backend - the return shape is the contract.
  */
 
 const s = (v: unknown): string =>
   typeof v === "string" ? v.trim() : Array.isArray(v) ? v.join(", ") : "";
 
 const list = (v: unknown): string[] => {
-  if (Array.isArray(v)) return v.map(String).map((x) => x.trim()).filter(Boolean);
+  if (Array.isArray(v))
+    return v
+      .map(String)
+      .map((x) => x.trim())
+      .filter(Boolean);
   if (typeof v === "string")
     return v
       .split(/[,\n]/)
@@ -65,11 +69,25 @@ function runEditorial(i: Inputs): ModuleRunOutput {
       {
         heading: "Spine",
         bullets: lines.slice(0, 3).length
-          ? lines.slice(0, 3).map((l) => `→ ${l}`)
+          ? lines.slice(0, 3).map((l) => `- ${l}`)
           : ["Draft the load-bearing sentence."],
       },
-      { heading: "What to cut", bullets: ["Anything that only proves you thought about it.", "Anything that repeats the spine.", "Anything the reader will not use."] },
-      { heading: "What to strengthen", bullets: ["The opening (earn the read).", "The turn (where the reader shifts).", "The last sentence (what they leave with)."] },
+      {
+        heading: "What to cut",
+        bullets: [
+          "Anything that only proves you thought about it.",
+          "Anything that repeats the spine.",
+          "Anything the reader will not use.",
+        ],
+      },
+      {
+        heading: "What to strengthen",
+        bullets: [
+          "The opening (earn the read).",
+          "The turn (where the reader shifts).",
+          "The last sentence (what they leave with).",
+        ],
+      },
     ],
     nextMoves: ["Rewrite opening.", "Sharpen the turn.", "Rewrite the closing to land the intent."],
   };
@@ -103,11 +121,33 @@ function runLaunchPackets(i: Inputs): ModuleRunOutput {
   return {
     summary: `Packet for "${project}" across ${channels.join(", ")}.`,
     sections: [
-      { heading: "Core artifacts", bullets: ["One-line pitch.", "One paragraph.", "One-page overview.", "Cover image / motif."] },
-      { heading: "Per-channel adaptations", bullets: channels.map((c) => `${c}: shortest version that still carries the spine.`) },
-      { heading: "Proof", bullets: ["One quote or moment that shows it works.", "One screenshot or artifact.", "One next step for the reader."] },
+      {
+        heading: "Core artifacts",
+        bullets: [
+          "One-line pitch.",
+          "One paragraph.",
+          "One-page overview.",
+          "Cover image / motif.",
+        ],
+      },
+      {
+        heading: "Per-channel adaptations",
+        bullets: channels.map((c) => `${c}: shortest version that still carries the spine.`),
+      },
+      {
+        heading: "Proof",
+        bullets: [
+          "One quote or moment that shows it works.",
+          "One screenshot or artifact.",
+          "One next step for the reader.",
+        ],
+      },
     ],
-    nextMoves: ["Write the one-liner first.", "Expand only when it's honest.", "Ship the smallest complete packet."],
+    nextMoves: [
+      "Write the one-liner first.",
+      "Expand only when it's honest.",
+      "Ship the smallest complete packet.",
+    ],
   };
 }
 
@@ -119,18 +159,25 @@ function runPlatformAdapter(i: Inputs): ModuleRunOutput {
   return {
     summary: `Reshaping the source for ${platform}. Constraint: ${constraint}.`,
     sections: [
-      { heading: "Spine to preserve", bullets: seed.length ? seed : ["Extract the load-bearing sentence before reshaping."] },
+      {
+        heading: "Spine to preserve",
+        bullets: seed.length ? seed : ["Extract the load-bearing sentence before reshaping."],
+      },
       {
         heading: `${platform} adaptation`,
         bullets: [
           "Native opening line (matches the platform's grammar).",
           "One tension the reader recognizes in the first scroll.",
-          "The turn — where the piece earns its ending.",
+          "The turn - where the piece earns its ending.",
           "A closing that invites a small action.",
         ],
       },
     ],
-    nextMoves: [`Draft the ${platform} version.`, "Read it aloud against the spine.", "Cut anything that only makes sense elsewhere."],
+    nextMoves: [
+      `Draft the ${platform} version.`,
+      "Read it aloud against the spine.",
+      "Cut anything that only makes sense elsewhere.",
+    ],
   };
 }
 
@@ -164,12 +211,24 @@ function runCreativeOperator(i: Inputs): ModuleRunOutput {
   return {
     summary: `Reading the log for ${horizon} at ${energy} energy.`,
     sections: [
-      { heading: "Threads active", bullets: lines.length ? lines : ["Name what's still moving.", "Name what's stalled.", "Name what's finished."] },
-      { heading: "Match to energy", bullets: energy === "low"
-        ? ["Small, closing work. Nothing new opened."]
-        : energy === "high"
-          ? ["Open the one thing that scares you.", "Close one thing that's overdue.", "Rest before you spend it all."]
-          : ["One opening, one closing, one refinement."],
+      {
+        heading: "Threads active",
+        bullets: lines.length
+          ? lines
+          : ["Name what's still moving.", "Name what's stalled.", "Name what's finished."],
+      },
+      {
+        heading: "Match to energy",
+        bullets:
+          energy === "low"
+            ? ["Small, closing work. Nothing new opened."]
+            : energy === "high"
+              ? [
+                  "Open the one thing that scares you.",
+                  "Close one thing that's overdue.",
+                  "Rest before you spend it all.",
+                ]
+              : ["One opening, one closing, one refinement."],
       },
     ],
     nextMoves: [
@@ -182,8 +241,8 @@ function runCreativeOperator(i: Inputs): ModuleRunOutput {
 
 const RUNNERS: Record<string, (i: Inputs) => ModuleRunOutput> = {
   "signal-collapse": runSignalCollapse,
-  "editorial": runEditorial,
-  "personas": runPersonas,
+  editorial: runEditorial,
+  personas: runPersonas,
   "launch-packets": runLaunchPackets,
   "platform-adapter": runPlatformAdapter,
   "serendipity-lab": runSerendipity,

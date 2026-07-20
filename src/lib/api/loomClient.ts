@@ -1,23 +1,23 @@
 import {
   ok,
   unavailable,
+  type CurrentsReading,
   type LoomModule,
   type MirrorResult,
   type ModeId,
+  type ModuleRunOutput,
   type Result,
   type SparkSketch,
-  type CurrentsReading,
   type WeavePlan,
-  type ModuleRunOutput,
 } from "@/lib/data/types";
 import type { WorkflowTemplate } from "@/lib/modes/workflows";
-import { LOOM_MODULES } from "@/lib/loom/modules";
-import { weave as localWeave, type WeaveRequest } from "@/lib/loom/orchestrator";
 import { runModule } from "@/lib/loom/execute";
+import { getLoomModule, LOOM_MODULES } from "@/lib/loom/modules";
+import { weave as localWeave, type WeaveRequest } from "@/lib/loom/orchestrator";
 
 /**
- * Thin client for the future Loom backend. Every method currently
- * returns `unavailable` — Codex will wire the real endpoints later.
+ * Thin client for the future Loom backend. The app talks only to this boundary;
+ * today's implementation is deterministic, local-first, and network-free.
  *
  * Endpoints (contract):
  *   GET  /api/loom/modules
@@ -28,10 +28,23 @@ import { runModule } from "@/lib/loom/execute";
  *   POST /api/spark/mirror
  */
 
-const AWAITING = "Awaiting Loom engine — will run when connected.";
+const AWAITING = "Awaiting Loom engine - will run when connected.";
 
 /** Flip to true once Codex wires a real backend. */
 const USE_REMOTE_LOOM = false;
+
+type ErrorReason = Exclude<Result<never>, { ok: true }>["reason"];
+
+const errorResult = <T>(
+  reason: ErrorReason,
+  message: string,
+  details?: Record<string, unknown>,
+): Result<T> => ({ ok: false, reason, message, details });
+
+const isFilled = (value: unknown) =>
+  Array.isArray(value)
+    ? value.some((item) => String(item).trim().length > 0)
+    : String(value ?? "").trim().length > 0;
 
 export interface LoomRunRequest {
   moduleId: string;
@@ -68,11 +81,46 @@ export const loomClient = {
   },
   async run(req: LoomRunRequest): Promise<Result<LoomRunPacket>> {
     if (USE_REMOTE_LOOM) return unavailable(AWAITING);
-    const output = runModule(req.moduleId, req.inputs);
-    return ok({ moduleId: req.moduleId, output, ranAt: new Date().toISOString() });
+
+    const mod = getLoomModule(req.moduleId);
+    if (!mod) {
+      return errorResult("not_found", `No Loom module is registered for "${req.moduleId}".`, {
+        moduleId: req.moduleId,
+      });
+    }
+
+    const invalidSelect = mod.inputs.find(
+      (input) =>
+        input.kind === "select" &&
+        isFilled(req.inputs[input.id]) &&
+        !input.options?.includes(String(req.inputs[input.id])),
+    );
+
+    if (invalidSelect) {
+      return errorResult(
+        "validation_error",
+        `"${invalidSelect.label}" needs one of the supported options.`,
+        { field: invalidSelect.id, options: invalidSelect.options ?? [] },
+      );
+    }
+
+    try {
+      const output = runModule(req.moduleId, req.inputs);
+      return ok({ moduleId: req.moduleId, output, ranAt: new Date().toISOString() });
+    } catch (cause) {
+      return errorResult("execution_error", "The Loom could not complete this local module run.", {
+        moduleId: req.moduleId,
+        cause: cause instanceof Error ? cause.message : String(cause),
+      });
+    }
   },
   async weave(req: WeaveRequest): Promise<Result<WeavePlan>> {
     if (USE_REMOTE_LOOM) return unavailable(AWAITING);
+    if (!req.body.trim()) {
+      return errorResult("validation_error", "Give the Loom at least one thread to hold.", {
+        field: "body",
+      });
+    }
     return ok(localWeave(req));
   },
   async reflect(_req: SparkReflectRequest): Promise<Result<SparkSketch>> {

@@ -1,13 +1,6 @@
 import type { AgentId } from "@/lib/data/types";
 
-export type SigilVariant =
-  | "loom"
-  | "node"
-  | "spiral"
-  | "eye"
-  | "weave"
-  | "vessel"
-  | "crown";
+export type SigilVariant = "loom" | "node" | "spiral" | "eye" | "weave" | "vessel" | "crown";
 
 export interface AgentDef {
   id: AgentId;
@@ -42,9 +35,21 @@ export const AGENTS: AgentDef[] = [
     accent: "oklch(0.75 0.16 220)",
     moduleIds: ["signal-collapse", "serendipity-lab"],
     keywords: [
-      "research", "explore", "understand", "study", "signal", "pattern",
-      "scattered", "messy", "field", "collect", "notes", "reading",
-      "adjacent", "inspiration", "reference",
+      "research",
+      "explore",
+      "understand",
+      "study",
+      "signal",
+      "pattern",
+      "scattered",
+      "messy",
+      "field",
+      "collect",
+      "notes",
+      "reading",
+      "adjacent",
+      "inspiration",
+      "reference",
     ],
   },
   {
@@ -54,11 +59,23 @@ export const AGENTS: AgentDef[] = [
     sigil: "weave",
     essence: "Shapes rough material into publishable form without flattening it.",
     accent: "oklch(0.78 0.18 320)",
-    moduleIds: ["editorial", "personas"],
+    moduleIds: ["editorial"],
     keywords: [
-      "write", "essay", "article", "post", "draft", "edit", "editorial",
-      "voice", "tone", "story", "narrative", "publish", "newsletter",
-      "content", "copy",
+      "write",
+      "essay",
+      "article",
+      "post",
+      "draft",
+      "edit",
+      "editorial",
+      "voice",
+      "tone",
+      "story",
+      "narrative",
+      "publish",
+      "newsletter",
+      "content",
+      "copy",
     ],
   },
   {
@@ -70,8 +87,17 @@ export const AGENTS: AgentDef[] = [
     accent: "oklch(0.76 0.17 200)",
     moduleIds: ["launch-packets"],
     keywords: [
-      "product", "ship", "launch", "release", "offer", "package", "site",
-      "landing", "artifact", "asset", "kit",
+      "product",
+      "ship",
+      "launch",
+      "release",
+      "offer",
+      "package",
+      "site",
+      "landing",
+      "artifact",
+      "asset",
+      "kit",
     ],
   },
   {
@@ -83,9 +109,20 @@ export const AGENTS: AgentDef[] = [
     accent: "oklch(0.74 0.19 340)",
     moduleIds: ["platform-adapter"],
     keywords: [
-      "market", "audience", "reach", "share", "distribute", "platform",
-      "twitter", "x", "linkedin", "instagram", "social", "thread",
-      "adapt", "channel",
+      "market",
+      "audience",
+      "reach",
+      "share",
+      "distribute",
+      "platform",
+      "twitter",
+      "x",
+      "linkedin",
+      "instagram",
+      "social",
+      "thread",
+      "adapt",
+      "channel",
     ],
   },
   {
@@ -93,12 +130,21 @@ export const AGENTS: AgentDef[] = [
     label: "Avatar",
     role: "Holds the faceless presence",
     sigil: "crown",
-    essence: "Coherence across every surface — voice, look, feel.",
+    essence: "Coherence across every surface - voice, look, feel.",
     accent: "oklch(0.80 0.14 275)",
-    moduleIds: [],
+    moduleIds: ["personas"],
     keywords: [
-      "brand", "identity", "avatar", "persona", "presence", "voice",
-      "faceless", "aesthetic", "look", "feel", "coherence",
+      "brand",
+      "identity",
+      "avatar",
+      "persona",
+      "presence",
+      "voice",
+      "faceless",
+      "aesthetic",
+      "look",
+      "feel",
+      "coherence",
     ],
   },
   {
@@ -110,15 +156,25 @@ export const AGENTS: AgentDef[] = [
     accent: "oklch(0.72 0.14 250)",
     moduleIds: ["creative-operator"],
     keywords: [
-      "operations", "system", "workflow", "process", "plan", "week",
-      "schedule", "next", "move", "backlog", "organize", "log",
-      "quarter", "month",
+      "operations",
+      "system",
+      "workflow",
+      "process",
+      "plan",
+      "week",
+      "schedule",
+      "next",
+      "move",
+      "backlog",
+      "organize",
+      "log",
+      "quarter",
+      "month",
     ],
   },
 ];
 
-export const getAgent = (id: AgentId): AgentDef | undefined =>
-  AGENTS.find((a) => a.id === id);
+export const getAgent = (id: AgentId): AgentDef | undefined => AGENTS.find((a) => a.id === id);
 
 export const agentForModule = (moduleId: string): AgentDef | undefined =>
   AGENTS.find((a) => a.moduleIds.includes(moduleId));
