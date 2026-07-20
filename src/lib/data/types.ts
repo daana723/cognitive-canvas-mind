@@ -104,3 +104,5 @@ export const unavailable = (message: string): Result<never> => ({
 });
 
 export const ok = <T>(data: T): Result<T> => ({ ok: true, data });
+
+export type { CognitiveContext } from "@/lib/cognition/types";

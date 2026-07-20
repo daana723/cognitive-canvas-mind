@@ -1,11 +1,19 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Sigil } from "@/components/loom/Sigil";
-import { getLoomModule } from "@/lib/loom/modules";
-import { agentForModule } from "@/lib/loom/agents";
+import { getLocalCognitiveContext } from "@/lib/cognition/context";
+import { patternMemoryStore } from "@/lib/cognition/memory";
+import { cognitiveStateStore } from "@/lib/cognition/state";
+import {
+  COGNITIVE_MODE_LABELS,
+  DEFAULT_COGNITIVE_STATE,
+  type CognitiveState,
+} from "@/lib/cognition/types";
 import { loomClient } from "@/lib/api/loomClient";
 import { dataAdapter } from "@/lib/data/adapter";
 import type { LoomModule, LoomModuleInput, ModuleRunOutput } from "@/lib/data/types";
+import { agentForModule } from "@/lib/loom/agents";
+import { getLoomModule } from "@/lib/loom/modules";
 
 export const Route = createFileRoute("/loom/$moduleId")({
   loader: ({ params }) => {
@@ -19,7 +27,7 @@ export const Route = createFileRoute("/loom/$moduleId")({
       <h1 className="font-display text-3xl">No such module.</h1>
       <p className="mt-4 text-muted-foreground">
         <Link to="/loom/constellation" className="text-thread">
-          Return to the constellation →
+          Return to the constellation -&gt;
         </Link>
       </p>
     </section>
@@ -32,17 +40,30 @@ export const Route = createFileRoute("/loom/$moduleId")({
   ),
 });
 
+const SUPPORT_NEEDS: Array<{ value: CognitiveState["supportNeed"]; label: string }> = [
+  { value: "structure", label: "Structure" },
+  { value: "micro-steps", label: "Micro-steps" },
+  { value: "decision-help", label: "Decision help" },
+  { value: "encouragement", label: "Encouragement" },
+  { value: "decompression", label: "Decompression" },
+];
+
 function ModuleRunner() {
   const { module: mod } = Route.useLoaderData() as { module: LoomModule };
   const agent = agentForModule(mod.id);
 
   const [values, setValues] = useState<Record<string, unknown>>(() => {
     const seed: Record<string, unknown> = {};
-    for (const input of mod.inputs) seed[input.id] = input.kind === "tags" ? "" : "";
+    for (const input of mod.inputs) seed[input.id] = "";
     return seed;
   });
   const [output, setOutput] = useState<ModuleRunOutput | null>(null);
   const [running, setRunning] = useState(false);
+  const [cognitiveState, setCognitiveState] = useState<CognitiveState>(DEFAULT_COGNITIVE_STATE);
+
+  useEffect(() => {
+    setCognitiveState(cognitiveStateStore.load());
+  }, []);
 
   const filled = useMemo(
     () => mod.inputs.some((i: LoomModuleInput) => String(values[i.id] ?? "").trim().length > 0),
@@ -62,7 +83,13 @@ function ModuleRunner() {
               .filter(Boolean)
           : raw;
     }
-    const res = await loomClient.run({ moduleId: mod.id, inputs });
+    const savedState = cognitiveStateStore.save(cognitiveState);
+    setCognitiveState(savedState);
+    const res = await loomClient.run({
+      moduleId: mod.id,
+      inputs,
+      cognitiveContext: getLocalCognitiveContext(),
+    });
     if (res.ok) {
       setOutput(res.data.output);
       await dataAdapter.saveModuleRun({
@@ -70,6 +97,12 @@ function ModuleRunner() {
         inputs,
         output: res.data.output,
         ranAt: res.data.ranAt,
+      });
+      patternMemoryStore.add({
+        source: "loom-run",
+        moduleId: mod.id,
+        mode: savedState.mode,
+        observation: `${mod.label} ran while state was ${savedState.mode}. Summary: ${res.data.output.summary}`,
       });
     }
     setRunning(false);
@@ -81,7 +114,7 @@ function ModuleRunner() {
         to="/loom/constellation"
         className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground hover:text-foreground transition-calm"
       >
-        ← Constellation
+        &lt;- Constellation
       </Link>
 
       <div className="mt-6 flex items-start gap-5">
@@ -99,7 +132,95 @@ function ModuleRunner() {
         </div>
       </div>
 
-      <div className="mt-10 glass-panel rounded-3xl p-6 sm:p-8">
+      <div className="mt-8 glass-panel rounded-3xl p-5 sm:p-6">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">
+              Current state
+            </span>
+            <select
+              value={cognitiveState.mode}
+              onChange={(e) =>
+                setCognitiveState((state) => ({
+                  ...state,
+                  mode: e.target.value as CognitiveState["mode"],
+                }))
+              }
+              className="mt-2 w-full rounded-xl bg-background/40 p-3 text-sm outline-none ring-1 ring-border/40 focus:ring-2 focus:ring-thread/60 transition-calm"
+            >
+              {Object.entries(COGNITIVE_MODE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block">
+            <span className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">
+              Support need
+            </span>
+            <select
+              value={cognitiveState.supportNeed}
+              onChange={(e) =>
+                setCognitiveState((state) => ({
+                  ...state,
+                  supportNeed: e.target.value as CognitiveState["supportNeed"],
+                }))
+              }
+              className="mt-2 w-full rounded-xl bg-background/40 p-3 text-sm outline-none ring-1 ring-border/40 focus:ring-2 focus:ring-thread/60 transition-calm"
+            >
+              {SUPPORT_NEEDS.map((need) => (
+                <option key={need.value} value={need.value}>
+                  {need.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          {[
+            ["energy", "Energy"],
+            ["focus", "Focus"],
+            ["overwhelm", "Overwhelm"],
+          ].map(([key, label]) => (
+            <label key={key} className="block">
+              <span className="flex justify-between text-[11px] tracking-[0.18em] uppercase text-muted-foreground">
+                {label}
+                <span>{cognitiveState[key as "energy" | "focus" | "overwhelm"]}/5</span>
+              </span>
+              <input
+                type="range"
+                min="1"
+                max="5"
+                value={cognitiveState[key as "energy" | "focus" | "overwhelm"]}
+                onChange={(e) =>
+                  setCognitiveState((state) => ({
+                    ...state,
+                    [key]: Number(e.target.value),
+                  }))
+                }
+                className="mt-2 w-full accent-[color:var(--thread)]"
+              />
+            </label>
+          ))}
+        </div>
+        <label className="mt-4 block">
+          <span className="text-[11px] tracking-[0.24em] uppercase text-muted-foreground">
+            State note
+          </span>
+          <input
+            value={cognitiveState.note ?? ""}
+            placeholder="What should the Loom know about your capacity right now?"
+            onChange={(e) => setCognitiveState((state) => ({ ...state, note: e.target.value }))}
+            className="mt-2 w-full rounded-xl bg-background/40 p-3 text-sm outline-none ring-1 ring-border/40 focus:ring-2 focus:ring-thread/60 transition-calm"
+          />
+        </label>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Saved locally. Used to adapt the run; never diagnostic.
+        </p>
+      </div>
+
+      <div className="mt-6 glass-panel rounded-3xl p-6 sm:p-8">
         <div className="grid gap-5">
           {mod.inputs.map((input: LoomModuleInput) => (
             <label key={input.id} className="block">
@@ -120,7 +241,7 @@ function ModuleRunner() {
                   onChange={(e) => setValues((v) => ({ ...v, [input.id]: e.target.value }))}
                   className="mt-2 w-full rounded-xl bg-background/40 p-3 text-sm outline-none ring-1 ring-border/40 focus:ring-2 focus:ring-thread/60 transition-calm"
                 >
-                  <option value="">Choose…</option>
+                  <option value="">Choose...</option>
                   {(input.options ?? []).map((o: string) => (
                     <option key={o} value={o}>
                       {o}
@@ -139,7 +260,7 @@ function ModuleRunner() {
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-6 flex items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             Local - LM Studio when enabled - saved to your device.
           </p>
@@ -150,7 +271,7 @@ function ModuleRunner() {
             className="rounded-full px-6 py-3 text-sm tracking-[0.22em] uppercase disabled:opacity-40 transition-calm"
             style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.05 275)" }}
           >
-            {running ? "Running…" : "Run module"}
+            {running ? "Running..." : "Run module"}
           </button>
         </div>
       </div>
@@ -167,7 +288,7 @@ function ModuleRunner() {
                 <ul className="mt-3 space-y-2">
                   {s.bullets.map((b, i) => (
                     <li key={i} className="text-sm leading-relaxed text-foreground/90">
-                      — {b}
+                      - {b}
                     </li>
                   ))}
                 </ul>

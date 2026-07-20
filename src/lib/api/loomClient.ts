@@ -2,6 +2,7 @@ import {
   ok,
   unavailable,
   type CurrentsReading,
+  type CognitiveContext,
   type LoomModule,
   type MirrorResult,
   type ModeId,
@@ -51,6 +52,12 @@ export interface LoomRunRequest {
   moduleId: string;
   inputs: Record<string, unknown>;
   mode?: ModeId;
+  cognitiveContext?: CognitiveContext;
+}
+
+export interface CompanionAskRequest {
+  question: string;
+  cognitiveContext?: CognitiveContext;
 }
 
 export interface LoomRunPacket {
@@ -109,7 +116,11 @@ export const loomClient = {
       try {
         const { runLoomModuleWithLocalModel } = await import("@/lib/api/loomLmStudio.functions");
         const output = await runLoomModuleWithLocalModel({
-          data: { moduleId: req.moduleId, inputs: req.inputs },
+          data: {
+            moduleId: req.moduleId,
+            inputs: req.inputs,
+            cognitiveContext: req.cognitiveContext,
+          },
         });
         return ok({ moduleId: req.moduleId, output, ranAt: new Date().toISOString() });
       } catch (cause) {
@@ -135,6 +146,51 @@ export const loomClient = {
       });
     }
     return ok(localWeave(req));
+  },
+  async askCompanion(req: CompanionAskRequest): Promise<Result<ModuleRunOutput>> {
+    if (!req.question.trim()) {
+      return errorResult("validation_error", "Ask the Companion one thread to hold.", {
+        field: "question",
+      });
+    }
+
+    if (USE_LM_STUDIO) {
+      try {
+        const { askCompanionWithLocalModel } = await import("@/lib/api/loomLmStudio.functions");
+        const output = await askCompanionWithLocalModel({
+          data: { question: req.question, cognitiveContext: req.cognitiveContext },
+        });
+        return ok(output);
+      } catch (cause) {
+        console.warn("LM Studio Companion ask failed; falling back to local guidance.", cause);
+      }
+    }
+
+    return ok({
+      summary: "The Companion is holding the thread locally.",
+      sections: [
+        {
+          heading: "What seems true",
+          bullets: [
+            "Your current state matters as much as the task itself.",
+            "Choose the smallest next move that reduces friction instead of proving capacity.",
+          ],
+        },
+        {
+          heading: "Pattern to notice",
+          bullets: [
+            req.cognitiveContext?.state.mode
+              ? `This came up while your state was ${req.cognitiveContext.state.mode}.`
+              : "Name the state you are in before choosing the workflow.",
+          ],
+        },
+      ],
+      nextMoves: [
+        "Write one sentence about what feels hardest.",
+        "Pick one five-minute action.",
+        "Save the pattern if it repeats.",
+      ],
+    });
   },
   async reflect(_req: SparkReflectRequest): Promise<Result<SparkSketch>> {
     return unavailable(AWAITING);
