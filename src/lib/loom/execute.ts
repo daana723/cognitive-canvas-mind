@@ -33,28 +33,59 @@ const trimLines = (v: unknown, max = 6): string[] =>
 type Inputs = Record<string, unknown>;
 
 function runSignalCollapse(i: Inputs): ModuleRunOutput {
-  const lines = trimLines(i.field);
-  const constraint = s(i.constraint) || "no explicit constraint";
+  const field = s(i.field);
+  const lineFragments = trimLines(field, 8);
+  const sentenceFragments = field
+    .split(/(?<=[.!?])\s+/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .slice(0, 6);
+  const fragments =
+    lineFragments.length > 1
+      ? lineFragments
+      : sentenceFragments.length
+        ? sentenceFragments
+        : lineFragments;
+  const constraint = s(i.constraint) || "one tiny useful output";
+  const first = fragments[0] || field || "the idea that keeps asking for attention";
+  const second = fragments[1];
+  const third = fragments[2];
+  const thread = first.length > 140 ? `${first.slice(0, 137)}...` : first;
+
   return {
-    summary: `Compressing ${lines.length || "the"} scattered signal${lines.length === 1 ? "" : "s"} against: ${constraint}.`,
+    summary: `The thread to hold now is: ${thread}`,
     sections: [
       {
-        heading: "Load-bearing thread",
-        bullets: lines.slice(0, 3).length
-          ? lines.slice(0, 3).map((l) => `Keep: ${l}`)
-          : ["Name the one thread the rest hangs on."],
+        heading: "Chosen thread",
+        bullets: [
+          `Start with this because it already has emotional charge and visible friction: ${first}`,
+          `Make the container small: ${constraint}.`,
+        ],
       },
       {
-        heading: "Set down (for now)",
-        bullets: lines.slice(3, 6).length
-          ? lines.slice(3, 6).map((l) => `Park: ${l}`)
-          : ["List the strands you're not carrying this cycle."],
+        heading: "Park for later",
+        bullets: [
+          second
+            ? `Park: ${second}`
+            : "All alternate versions, research loops, and future expansions.",
+          third
+            ? `Park: ${third}`
+            : "Anything that requires a bigger plan before the first artifact exists.",
+        ],
+      },
+      {
+        heading: "Tiny artifact",
+        bullets: [
+          'Draft one sentence that begins: "I keep circling this because..."',
+          "Turn that sentence into either a rough post opening or a five-minute action.",
+          "Stop before reorganizing the whole system.",
+        ],
       },
     ],
     nextMoves: [
-      "Write the load-bearing thread in one sentence.",
-      `Test it against the constraint: ${constraint}.`,
-      "If it survives, commit for one cycle.",
+      "Open a blank note and copy only the chosen thread.",
+      `Make the smallest version that satisfies: ${constraint}.`,
+      "Set a 5-minute timer. When it ends, decide: ship, shape, or park.",
     ],
   };
 }
