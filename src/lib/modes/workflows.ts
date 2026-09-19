@@ -9,6 +9,10 @@ export interface WorkflowTemplate {
   intent: string;
   duration: string;
   steps: WorkflowStep[];
+  /** Loom module this workflow hands off to. */
+  moduleId: string;
+  /** Text pre-filled into the module's first long field. */
+  seed: string;
 }
 
 export const WORKFLOWS: WorkflowTemplate[] = [
