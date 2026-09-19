@@ -99,6 +99,27 @@ function WorkflowsPage() {
           </p>
         )}
       </section>
+
+      <section className="relative z-10 mx-auto mt-12 max-w-3xl px-6">
+        <div className="glass-panel rounded-2xl p-5 flex flex-wrap items-center gap-3">
+          <p className="mr-auto text-[10px] tracking-[0.24em] uppercase text-muted-foreground">
+            Where next
+          </p>
+          <Link
+            to="/loom"
+            className="rounded-full px-5 py-2.5 text-[11px] tracking-[0.22em] uppercase transition-calm"
+            style={{ background: "var(--gradient-thread)", color: "oklch(0.14 0.04 270)" }}
+          >
+            Bring an intention to the Loom →
+          </Link>
+          <Link to="/snapshots" className="rounded-full border border-border/70 px-5 py-2.5 text-[11px] tracking-[0.22em] uppercase text-foreground hover:bg-white/5 transition-calm">
+            Snapshots
+          </Link>
+          <Link to="/modes" className="rounded-full border border-border/70 px-5 py-2.5 text-[11px] tracking-[0.22em] uppercase text-foreground hover:bg-white/5 transition-calm">
+            Modes
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }
