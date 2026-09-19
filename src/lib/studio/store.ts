@@ -12,6 +12,12 @@ export interface Snapshot {
 export interface Reflection { id: string; body: string; createdAt: string; }
 export interface NarrativeNode { id: string; text: string; createdAt: string; }
 
+export interface WorkflowProgress {
+  steps: number[];
+  note?: string;
+  updatedAt: string;
+}
+
 export interface StudioState {
   currentMode?: ModeId;
   currentPhase?: PhaseId;
@@ -19,6 +25,7 @@ export interface StudioState {
   reflections: Reflection[];
   narrative: NarrativeNode[];
   narrativeContext: string;
+  workflowProgress: Record<string, WorkflowProgress>;
   updatedAt: string;
   version: 1;
 }
@@ -30,6 +37,7 @@ const empty: StudioState = {
   reflections: [],
   narrative: [],
   narrativeContext: "",
+  workflowProgress: {},
   updatedAt: new Date(0).toISOString(),
   version: 1,
 };

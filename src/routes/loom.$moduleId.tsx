@@ -8,6 +8,9 @@ import { dataAdapter } from "@/lib/data/adapter";
 import type { LoomModule, LoomModuleInput, ModuleRunOutput } from "@/lib/data/types";
 
 export const Route = createFileRoute("/loom/$moduleId")({
+  validateSearch: (search: Record<string, unknown>): { seed?: string } => ({
+    seed: typeof search.seed === "string" ? search.seed : undefined,
+  }),
   loader: ({ params }) => {
     const mod = getLoomModule(params.moduleId);
     if (!mod) throw notFound();
@@ -34,9 +37,13 @@ function ModuleRunner() {
   const { module: mod } = Route.useLoaderData() as { module: LoomModule };
   const agent = agentForModule(mod.id);
 
+  const { seed: seedText } = Route.useSearch();
+
   const [values, setValues] = useState<Record<string, unknown>>(() => {
     const seed: Record<string, unknown> = {};
-    for (const input of mod.inputs) seed[input.id] = input.kind === "tags" ? "" : "";
+    for (const input of mod.inputs) seed[input.id] = "";
+    const firstLong = mod.inputs.find((i) => i.kind === "longtext");
+    if (firstLong && seedText) seed[firstLong.id] = seedText;
     return seed;
   });
   const [output, setOutput] = useState<ModuleRunOutput | null>(null);
